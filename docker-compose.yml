@@ -1,0 +1,209 @@
+# docker-compose.yml  (project root)
+# Starts: MySQL, Redis, RabbitMQ, auth-service, and Angular frontend
+
+version: "3.9"
+
+services:
+
+  # ── MySQL ────────────────────────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: spendsmart-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Redis ────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: spendsmart-redis
+    ports:
+      - "6379:6379"
+
+
+  # ── RabbitMQ ─────────────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: spendsmart-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672" # management UI at http://localhost:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  # ── Eureka Server ────────────────────────────────────────────────
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    container_name: spendsmart-eureka
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Auth Service ─────────────────────────────────────────────────
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: spendsmart-auth
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      JWT_SECRET: ${JWT_SECRET}
+      EUREKA_SERVER: ${EUREKA_SERVER}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URI: ${GOOGLE_REDIRECT_URI}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GITHUB_REDIRECT_URI: ${GITHUB_REDIRECT_URI}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      FRONTEND_URL: ${FRONTEND_URL}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/api/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Expense Service ─────────────────────────────────────────────
+  expense-service:
+    build:
+      context: ./expense-service
+      dockerfile: Dockerfile
+    container_name: spendsmart-expense
+    ports:
+      - "8083:8083"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${EXPENSE_DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      JWT_SECRET: ${JWT_SECRET}
+      EUREKA_SERVER: ${EUREKA_SERVER}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/api/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── API Gateway ────────────────────────────────────────────────
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: spendsmart-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_SERVER: ${EUREKA_SERVER}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Admin Server ─────────────────────────────────────────────────
+  admin-server:
+    build:
+      context: ./admin-server
+      dockerfile: Dockerfile
+    container_name: spendsmart-admin
+    ports:
+      - "8082:8082"
+    environment:
+      EUREKA_SERVER: ${EUREKA_SERVER}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Recurring Transaction Service ──────────────────────────────
+  recurring-transaction-service:
+    build:
+      context: ./recurring-transaction-service
+      dockerfile: Dockerfile
+    container_name: spendsmart-recurring
+    ports:
+      - "8088:8088"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      JWT_SECRET: ${JWT_SECRET}
+      EUREKA_SERVER: ${EUREKA_SERVER}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8088/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Notification Service ──────────────────────────────────────────
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: spendsmart-notification
+    ports:
+      - "8089:8089"
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${NOTIFICATION_DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      JWT_SECRET: ${JWT_SECRET}
+      EUREKA_SERVER: ${EUREKA_SERVER}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8089/api/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mysql_data:

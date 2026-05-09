@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.spendsmart</groupId>
+    <artifactId>spendsmart-backend</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>spendsmart-backend</name>
+    <description>SpendSmart backend parent aggregator for all microservices</description>
+
+    <modules>
+        <module>admin-server</module>
+        <module>analytics-service</module>
+        <module>api-gateway</module>
+        <module>auth-service</module>
+        <module>budget-service</module>
+        <module>category-service</module>
+        <module>eureka-server</module>
+        <module>expense-service</module>
+        <module>income-service</module>
+        <module>notification-service</module>
+        <module>payment-service</module>
+        <module>recurring-transaction-service</module>
+
+        <module>spendsmart-common</module>
+    </modules>
+
+    <properties>
+        <sonar.projectKey>spendsmart-backend</sonar.projectKey>
+        <sonar.projectName>SpendSmart Backend</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+    </properties>
+</project>
