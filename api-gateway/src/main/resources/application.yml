@@ -1,0 +1,292 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      
+      # Route Definitions
+      routes:
+        # Auth Service
+        # OAuth2 Login (Specific)
+        - id: auth-oauth2
+          uri: http://localhost:8081
+          predicates:
+            - Path=/auth/oauth2/**, /auth/login/oauth2/code/**
+          filters:
+            - RewritePath=/auth/(?<segment>.*), /api/$\{segment}
+
+        # General Auth Service
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: auth-service
+                fallbackUri: forward:/fallback/auth
+
+        # Auth Docs (Aggregated)
+        - id: auth-docs
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Expense Service
+        - id: expense-service
+          uri: lb://expense-service
+          predicates:
+            - Path=/expenses/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: expense-service
+                fallbackUri: forward:/fallback/expense
+
+        # Expense Docs (Aggregated)
+        - id: expense-docs
+          uri: lb://expense-service
+          predicates:
+            - Path=/expense-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Income Service
+        - id: income-service
+          uri: lb://income-service
+          predicates:
+            - Path=/incomes/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: income-service
+                fallbackUri: forward:/fallback/income
+
+        # Income Docs (Aggregated)
+        - id: income-docs
+          uri: lb://income-service
+          predicates:
+            - Path=/income-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Category Service
+        - id: category-service
+          uri: lb://category-service
+          predicates:
+            - Path=/categories/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: category-service
+                fallbackUri: forward:/fallback/category
+
+        # Category Docs (Aggregated)
+        - id: category-docs
+          uri: lb://category-service
+          predicates:
+            - Path=/category-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Budget Service
+        - id: budget-service
+          uri: lb://budget-service
+          predicates:
+            - Path=/budgets/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: budget-service
+                fallbackUri: forward:/fallback/budget
+
+        # Budget Docs (Aggregated)
+        - id: budget-docs
+          uri: lb://budget-service
+          predicates:
+            - Path=/budget-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Analytics Service
+        - id: analytics-service
+          uri: lb://analytics-service
+          predicates:
+            - Path=/analytics/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: analytics-service
+                fallbackUri: forward:/fallback/analytics
+
+        # Analytics Docs (Aggregated)
+        - id: analytics-docs
+          uri: lb://analytics-service
+          predicates:
+            - Path=/analytics-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Recurring Service
+        - id: recurring-transaction-service
+          uri: lb://recurring-transaction-service
+          predicates:
+            - Path=/recurring/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: recurring-service
+                fallbackUri: forward:/fallback/recurring
+
+        # Recurring Docs (Aggregated)
+        - id: recurring-docs
+          uri: lb://recurring-transaction-service
+          predicates:
+            - Path=/recurring-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Notification Service
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notifications/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: notification-service
+                fallbackUri: forward:/fallback/notification
+
+        # Notification Docs (Aggregated)
+        - id: notification-docs
+          uri: lb://notification-service
+          predicates:
+            - Path=/notification-docs/v3/api-docs
+          filters:
+            - SetPath=/api/v3/api-docs
+
+        # Payment Service
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payments/**
+          filters:
+            - PrefixPath=/api
+            - name: CircuitBreaker
+              args:
+                name: payment-service
+                fallbackUri: forward:/fallback/payment
+
+      # Centralized CORS Configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:4200"
+              - "http://localhost"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
+            exposedHeaders: "Authorization"
+            allowCredentials: true
+            maxAge: 3600
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: "Auth Service"
+        url: /auth-docs/v3/api-docs
+      - name: "Expense Service"
+        url: /expense-docs/v3/api-docs
+      - name: "Income Service"
+        url: /income-docs/v3/api-docs
+      - name: "Category Service"
+        url: /category-docs/v3/api-docs
+      - name: "Budget Service"
+        url: /budget-docs/v3/api-docs
+      - name: "Analytics Service"
+        url: /analytics-docs/v3/api-docs
+      - name: "Recurring Service"
+        url: /recurring-docs/v3/api-docs
+      - name: "Notification Service"
+        url: /notification-docs/v3/api-docs
+      - name: "Payment Service"
+        url: /payment-docs/v3/api-docs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    com.spendsmart.gateway: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+    instances:
+      auth-service:
+        baseConfig: default
+      expense-service:
+        baseConfig: default
+      income-service:
+        baseConfig: default
+      category-service:
+        baseConfig: default
+      budget-service:
+        baseConfig: default
+      analytics-service:
+        baseConfig: default
+      recurring-service:
+        baseConfig: default
+      notification-service:
+        baseConfig: default
+      payment-service:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 5s
