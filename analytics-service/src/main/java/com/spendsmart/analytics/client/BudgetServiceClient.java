@@ -15,4 +15,7 @@ public interface BudgetServiceClient {
 
     @GetMapping("/budgets/total/month")
     ApiResponse<BigDecimal> getTotalBudgetByMonth(@RequestParam int year, @RequestParam int month);
+
+    @GetMapping("/budgets/active")
+    ApiResponse<java.util.List<com.spendsmart.analytics.dto.BudgetDto>> getActiveBudgets();
 }

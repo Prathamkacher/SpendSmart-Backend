@@ -10,6 +10,7 @@ import com.spendsmart.auth.entity.User;
 import com.spendsmart.shared.exception.ResourceNotFoundException;
 import com.spendsmart.auth.mapper.UserMapper;
 import com.spendsmart.auth.repository.UserRepository;
+import com.spendsmart.auth.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +38,7 @@ class AdminServiceImplTest {
     @Mock private ExpenseClient expenseClient;
     @Mock private IncomeClient incomeClient;
     @Mock private RabbitTemplate rabbitTemplate;
+    @Mock private EmailService emailService;
 
     @InjectMocks
     private AdminServiceImpl adminService;
@@ -83,14 +85,13 @@ class AdminServiceImplTest {
 
     @Test
     void deleteUser_ShouldWork() {
-        when(userRepository.existsById(userId)).thenReturn(true);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         adminService.deleteUser(userId);
         verify(userRepository).deleteById(userId);
     }
 
     @Test
     void deleteUser_NotFound_ShouldThrow() {
-        when(userRepository.existsById(userId)).thenReturn(false);
         assertThatThrownBy(() -> adminService.deleteUser(userId))
                 .isInstanceOf(ResourceNotFoundException.class);
     }
@@ -149,6 +150,7 @@ class AdminServiceImplTest {
         lenient().when(userRepository.findAll()).thenReturn(Collections.singletonList(testUser));
         lenient().when(expenseClient.getGlobalStats()).thenReturn(ApiResponse.success("ok", new HashMap<>()));
         lenient().when(incomeClient.getGlobalStats()).thenReturn(ApiResponse.success("ok", new HashMap<>()));
+        lenient().when(userMapper.toProfileResponse(any())).thenReturn(new UserProfileResponse());
 
         byte[] report = adminService.exportPlatformReport();
         assertThat(report).isNotEmpty();

@@ -350,6 +350,7 @@ class AuthServiceImplTest {
         testUser.setPlanExpiryDate(LocalDateTime.now().minusDays(1));
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(userRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+        when(userMapper.toProfileResponse(testUser)).thenReturn(new UserProfileResponse());
 
         authService.getUserById(userId);
 

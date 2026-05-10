@@ -46,9 +46,8 @@ eureka:
   instance:
     prefer-ip-address: true
 
-app:
-  jwt:
-    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+jwt:
+  secret: ${JWT_SECRET:4mZ7qW2v5y8B/E(H+MbQeThWmZq4t7w9z$C&F)J@NcRfUjXn2r5u8x/A?D*G-KaPdS}
 
 management:
   endpoints:

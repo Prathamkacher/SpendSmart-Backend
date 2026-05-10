@@ -217,4 +217,139 @@ public class EmailService {
             return new byte[0];
         }
     }
+
+    @Async
+    public void sendRoleUpdateEmail(String toEmail, String fullName, String newRole) {
+        log.info("Sending role update email to: {}", toEmail);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8);
+            
+            helper.setTo(toEmail);
+            helper.setSubject("SpendSmart Account - Role Update");
+            
+            String roleColor = newRole.equals("ADMIN") ? "#fbbf24" : "#94a3b8";
+            
+            String bodyContent = "<p>Hello <strong>" + fullName + "</strong>,</p>" +
+                    "<p>Your account privileges on SpendSmart have been updated by the platform administrator.</p>" +
+                    "<div style='background: #1e293b; border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; border: 1px solid #334155;'>" +
+                    "<div style='font-size: 48px; margin-bottom: 16px;'> " + (newRole.equals("ADMIN") ? "🛡️" : "👤") + " </div>" +
+                    "<p style='color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0;'>New Account Status</p>" +
+                    "<h3 style='color: " + roleColor + "; font-size: 32px; margin: 8px 0; font-weight: 800;'>" + newRole + "</h3>" +
+                    "</div>" +
+                    "<p>As an <strong>" + newRole + "</strong>, your access levels have been adjusted accordingly. Please log in to explore your " + (newRole.equals("ADMIN") ? "administrative" : "new") + " dashboard.</p>" +
+                    "<a href='http://localhost:4200' class='btn'>Log In to SpendSmart</a>" +
+                    "<br><br><p>Best regards,<br><strong>The SpendSmart Admin Team</strong></p>";
+                    
+            helper.setText(buildHtmlTemplate("Account Privilege Update", bodyContent), true);
+            mailSender.send(message);
+            log.info("Role update email successfully sent to {}", toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send role update email to {}", toEmail, e);
+        }
+    }
+
+    @Async
+    public void sendAccountSuspendedEmail(String toEmail, String fullName) {
+        log.info("Sending account suspension email to: {}", toEmail);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8);
+
+            helper.setTo(toEmail);
+            helper.setSubject("SpendSmart Account - Access Suspended");
+
+            String bodyContent = "<p>Hello <strong>" + fullName + "</strong>,</p>" +
+                    "<p>We are writing to inform you that your SpendSmart account has been <strong>temporarily suspended</strong> by the platform administrator.</p>" +
+                    "<div style='background: #1e293b; border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; border: 1px solid #334155;'>" +
+                    "<div style='font-size: 48px; margin-bottom: 16px;'>🚫</div>" +
+                    "<p style='color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0;'>Account Status</p>" +
+                    "<h3 style='color: #f43f5e; font-size: 32px; margin: 8px 0; font-weight: 800;'>SUSPENDED</h3>" +
+                    "</div>" +
+                    "<p>While your account is suspended:</p>" +
+                    "<ul>" +
+                    "<li>You will not be able to log in to your account</li>" +
+                    "<li>All scheduled transactions are paused</li>" +
+                    "<li>Your data remains safe and intact</li>" +
+                    "</ul>" +
+                    "<p>If you believe this was done in error, please contact our support team for assistance.</p>" +
+                    "<br><p>Best regards,<br><strong>The SpendSmart Admin Team</strong></p>";
+
+            helper.setText(buildHtmlTemplate("Account Suspended", bodyContent), true);
+            mailSender.send(message);
+            log.info("Account suspension email successfully sent to {}", toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send suspension email to {}", toEmail, e);
+        }
+    }
+
+    @Async
+    public void sendAccountActivatedEmail(String toEmail, String fullName) {
+        log.info("Sending account reactivation email to: {}", toEmail);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8);
+
+            helper.setTo(toEmail);
+            helper.setSubject("SpendSmart Account - Access Restored");
+
+            String bodyContent = "<p>Hello <strong>" + fullName + "</strong>,</p>" +
+                    "<p>Great news! Your SpendSmart account has been <strong>reactivated</strong> by the platform administrator.</p>" +
+                    "<div style='background: #1e293b; border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; border: 1px solid #334155;'>" +
+                    "<div style='font-size: 48px; margin-bottom: 16px;'>✅</div>" +
+                    "<p style='color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0;'>Account Status</p>" +
+                    "<h3 style='color: #10b981; font-size: 32px; margin: 8px 0; font-weight: 800;'>ACTIVE</h3>" +
+                    "</div>" +
+                    "<p>Your account is now fully operational. You can:</p>" +
+                    "<ul>" +
+                    "<li>Log in and access your dashboard</li>" +
+                    "<li>Resume tracking expenses and income</li>" +
+                    "<li>All your previous data is preserved</li>" +
+                    "</ul>" +
+                    "<a href='http://localhost:4200' class='btn'>Log In to SpendSmart</a>" +
+                    "<br><br><p>Welcome back!<br><strong>The SpendSmart Admin Team</strong></p>";
+
+            helper.setText(buildHtmlTemplate("Account Reactivated", bodyContent), true);
+            mailSender.send(message);
+            log.info("Account reactivation email successfully sent to {}", toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send reactivation email to {}", toEmail, e);
+        }
+    }
+
+    @Async
+    public void sendAccountDeletedEmail(String toEmail, String fullName) {
+        log.info("Sending account deletion email to: {}", toEmail);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, UTF_8);
+
+            helper.setTo(toEmail);
+            helper.setSubject("SpendSmart Account - Permanently Removed");
+
+            String bodyContent = "<p>Hello <strong>" + fullName + "</strong>,</p>" +
+                    "<p>We are writing to confirm that your SpendSmart account has been <strong>permanently deleted</strong> by the platform administrator.</p>" +
+                    "<div style='background: #1e293b; border-radius: 16px; padding: 32px; text-align: center; margin: 24px 0; border: 1px solid #334155;'>" +
+                    "<div style='font-size: 48px; margin-bottom: 16px;'>🗑️</div>" +
+                    "<p style='color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin: 0;'>Account Status</p>" +
+                    "<h3 style='color: #ef4444; font-size: 32px; margin: 8px 0; font-weight: 800;'>DELETED</h3>" +
+                    "</div>" +
+                    "<p>This action is irreversible. All associated data including:</p>" +
+                    "<ul>" +
+                    "<li>Your profile and account settings</li>" +
+                    "<li>Expense and income records</li>" +
+                    "<li>Budget configurations</li>" +
+                    "<li>Recurring transaction schedules</li>" +
+                    "</ul>" +
+                    "<p>...have been permanently removed from our system.</p>" +
+                    "<p>If you believe this was done in error, please contact our support team immediately.</p>" +
+                    "<br><p>Regards,<br><strong>The SpendSmart Admin Team</strong></p>";
+
+            helper.setText(buildHtmlTemplate("Account Deleted", bodyContent), true);
+            mailSender.send(message);
+            log.info("Account deletion email successfully sent to {}", toEmail);
+        } catch (Exception e) {
+            log.error("Failed to send deletion email to {}", toEmail, e);
+        }
+    }
 }

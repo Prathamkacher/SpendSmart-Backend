@@ -2,27 +2,18 @@ package com.spendsmart.category.dto;
 
 import com.spendsmart.category.entity.CategoryType;
 import org.junit.jupiter.api.Test;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CategoryDtoTest {
 
     @Test
-    void testCategoryResponse() {
-        LocalDateTime now = LocalDateTime.now();
-        CategoryResponse response = CategoryResponse.builder()
-                .categoryId(1L)
-                .userId(10L)
-                .name("Food")
-                .type(CategoryType.EXPENSE)
-                .icon("pizza")
-                .colorCode("#FF0000")
-                .budgetLimit(new BigDecimal("500.00"))
-                .isDefault(false)
-                .createdAt(now)
-                .updatedAt(now)
-                .build();
+    void testCategoryResponseBuilderAndAccessors() {
+        LocalDateTime now = LocalDateTime.of(2026, 5, 10, 8, 30);
+        CategoryResponse response = buildCategoryResponse(now);
 
         assertEquals(1L, response.getCategoryId());
         assertEquals(10L, response.getUserId());
@@ -34,27 +25,86 @@ class CategoryDtoTest {
         assertFalse(response.getIsDefault());
         assertEquals(now, response.getCreatedAt());
         assertEquals(now, response.getUpdatedAt());
-
-        CategoryResponse empty = new CategoryResponse();
-        assertNotNull(empty.toString());
-        assertNotEquals(response, empty);
     }
 
     @Test
-    void testCategoryRequest() {
-        CategoryRequest request = new CategoryRequest();
-        request.setName("Travel");
-        request.setType(CategoryType.EXPENSE);
-        request.setIcon("plane");
-        request.setColorCode("#0000FF");
-        request.setBudgetLimit(new BigDecimal("1000.00"));
+    void testCategoryResponseEqualityAndAllArgsConstructor() {
+        LocalDateTime now = LocalDateTime.of(2026, 5, 10, 8, 30);
+        CategoryResponse first = buildCategoryResponse(now);
+        CategoryResponse second = new CategoryResponse(
+                1L,
+                10L,
+                "Food",
+                CategoryType.EXPENSE,
+                "pizza",
+                "#FF0000",
+                new BigDecimal("500.00"),
+                false,
+                now,
+                now
+        );
+
+        assertEquals(first, second);
+        assertEquals(first.hashCode(), second.hashCode());
+        assertTrue(first.toString().contains("Food"));
+    }
+
+    @Test
+    void testCategoryRequestBuilderAndAccessors() {
+        CategoryRequest request = buildCategoryRequest();
 
         assertEquals("Travel", request.getName());
         assertEquals(CategoryType.EXPENSE, request.getType());
         assertEquals("plane", request.getIcon());
         assertEquals("#0000FF", request.getColorCode());
         assertEquals(new BigDecimal("1000.00"), request.getBudgetLimit());
-        
-        assertNotNull(request.toString());
+    }
+
+    @Test
+    void testCategoryRequestEqualitySettersAndAllArgsConstructor() {
+        CategoryRequest request = buildCategoryRequest();
+        CategoryRequest same = new CategoryRequest(
+                "Travel",
+                CategoryType.EXPENSE,
+                "plane",
+                "#0000FF",
+                new BigDecimal("1000.00")
+        );
+        CategoryRequest mutable = new CategoryRequest();
+        mutable.setName("Travel");
+        mutable.setType(CategoryType.EXPENSE);
+        mutable.setIcon("plane");
+        mutable.setColorCode("#0000FF");
+        mutable.setBudgetLimit(new BigDecimal("1000.00"));
+
+        assertEquals(request, same);
+        assertEquals(request, mutable);
+        assertEquals(request.hashCode(), same.hashCode());
+        assertTrue(request.toString().contains("Travel"));
+    }
+
+    private static CategoryResponse buildCategoryResponse(LocalDateTime now) {
+        return CategoryResponse.builder()
+                .categoryId(1L)
+                .userId(10L)
+                .name("Food")
+                .type(CategoryType.EXPENSE)
+                .icon("pizza")
+                .colorCode("#FF0000")
+                .budgetLimit(new BigDecimal("500.00"))
+                .isDefault(false)
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+    }
+
+    private static CategoryRequest buildCategoryRequest() {
+        return CategoryRequest.builder()
+                .name("Travel")
+                .type(CategoryType.EXPENSE)
+                .icon("plane")
+                .colorCode("#0000FF")
+                .budgetLimit(new BigDecimal("1000.00"))
+                .build();
     }
 }

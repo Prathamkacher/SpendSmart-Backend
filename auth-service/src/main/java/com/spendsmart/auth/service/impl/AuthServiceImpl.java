@@ -141,7 +141,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileResponse getUserById(Long userId) {
-        return userMapper.toProfileResponse(findUserById(userId));
+        User user = findUserById(userId);
+        UserProfileResponse resp = userMapper.toProfileResponse(user);
+        if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+            resp.setFirstInitial(String.valueOf(user.getFullName().charAt(0)).toUpperCase());
+        }
+        return resp;
     }
 
     @Override
@@ -149,7 +154,12 @@ public class AuthServiceImpl implements AuthService {
     public UserProfileResponse getUserByEmail(String email) {
         User user = userRepository.findByEmail(normalizeEmail(email))
                 .orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
-        return userMapper.toProfileResponse(checkAndDowngradePlan(user));
+        user = checkAndDowngradePlan(user);
+        UserProfileResponse resp = userMapper.toProfileResponse(user);
+        if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+            resp.setFirstInitial(String.valueOf(user.getFullName().charAt(0)).toUpperCase());
+        }
+        return resp;
     }
 
     @Override
@@ -164,7 +174,11 @@ public class AuthServiceImpl implements AuthService {
         if (request.getBio() != null) user.setBio(request.getBio());
         if (request.getMonthlyBudget() != null) user.setMonthlyBudget(request.getMonthlyBudget());
         
-        return userMapper.toProfileResponse(userRepository.save(user));
+        UserProfileResponse resp = userMapper.toProfileResponse(userRepository.save(user));
+        if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+            resp.setFirstInitial(String.valueOf(user.getFullName().charAt(0)).toUpperCase());
+        }
+        return resp;
     }
 
     @Override
@@ -255,8 +269,6 @@ public class AuthServiceImpl implements AuthService {
         } else if (newPlan == User.PlanType.PRO) {
             int months = durationMonths != null ? durationMonths : 1;
             user.setPlanExpiryDate(LocalDateTime.now().plusMonths(months));
-            double amount = (months == 12) ? 1499.0 : 199.0 * months;
-            emailService.sendPremiumActivationEmail(user.getEmail(), user.getFullName(), "PRO", amount);
         }
         userRepository.save(user);
     }
@@ -296,10 +308,15 @@ public class AuthServiceImpl implements AuthService {
                 .user(user).token(refreshTokenValue).isRevoked(false)
                 .expiryDate(LocalDateTime.now().plusSeconds(refreshExpiration / 1000)).build());
         
+        UserProfileResponse resp = userMapper.toProfileResponse(user);
+        if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+            resp.setFirstInitial(String.valueOf(user.getFullName().charAt(0)).toUpperCase());
+        }
+        
         return AuthResponse.builder()
                 .accessToken(accessToken).refreshToken(refreshTokenValue)
                 .tokenType("Bearer").expiresIn(jwtExpiration)
-                .user(userMapper.toProfileResponse(user)).build();
+                .user(resp).build();
     }
 
     private void publishAuthEvent(AuthEvent.EventType type, User user) {

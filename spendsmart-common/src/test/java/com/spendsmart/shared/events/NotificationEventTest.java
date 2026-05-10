@@ -44,5 +44,9 @@ class NotificationEventTest {
         assertThat(first).isEqualTo(second);
         assertThat(first.hashCode()).isEqualTo(second.hashCode());
         assertThat(first.toString()).contains("Reminder");
+        
+        // Cover builder toString
+        String builderToString = NotificationEvent.builder().recipientId(1L).toString();
+        assertThat(builderToString).contains("recipientId=1");
     }
 }

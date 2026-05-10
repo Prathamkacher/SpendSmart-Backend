@@ -44,6 +44,10 @@ public class NotificationServiceImpl implements NotificationService {
         if (saved.getSeverity() == Notification.Severity.CRITICAL) {
             sendEmail(saved);
         }
+        
+        if (saved.getType() == Notification.NotificationType.PAYMENT_RECEIPT) {
+            sendReceiptEmail(saved);
+        }
 
         return mapToDTO(saved);
     }
@@ -130,6 +134,59 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    private void sendReceiptEmail(Notification notification) {
+        try {
+            com.spendsmart.notification.dto.UserProfileResponse user = authClient.getUserById(notification.getRecipientId());
+            if (user == null || user.getEmail() == null) return;
+            
+            String email = user.getEmail();
+            jakarta.mail.internet.MimeMessage mimeMessage = mailSender.createMimeMessage();
+            org.springframework.mail.javamail.MimeMessageHelper helper = new org.springframework.mail.javamail.MimeMessageHelper(mimeMessage, true, "UTF-8");
+            
+            helper.setTo(email);
+            helper.setSubject("Payment Success: Welcome to SpendSmart Pro!");
+            
+            // Premium Receipt HTML
+            String htmlContent = "<!DOCTYPE html><html><head><style>" +
+                "body { font-family: 'Inter', Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }" +
+                ".wrapper { padding: 40px 20px; }" +
+                ".container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }" +
+                ".header { background: linear-gradient(135deg, #10b981, #059669); padding: 40px; text-align: center; color: white; }" +
+                ".success-icon { background: rgba(255,255,255,0.2); width: 64px; height: 64px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 32px; }" +
+                ".content { padding: 40px; color: #1e293b; }" +
+                ".receipt-box { background: #f1f5f9; border-radius: 16px; padding: 24px; margin: 24px 0; border: 1px dashed #cbd5e1; }" +
+                ".receipt-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }" +
+                ".receipt-label { color: #64748b; font-weight: 500; }" +
+                ".receipt-value { color: #0f172a; font-weight: 700; }" +
+                ".total-row { border-top: 1px solid #cbd5e1; padding-top: 12px; margin-top: 12px; font-size: 18px; }" +
+                ".footer { text-align: center; padding: 32px; color: #94a3b8; font-size: 12px; }" +
+                ".btn { display: inline-block; padding: 14px 28px; background: #10b981; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; margin-top: 20px; }" +
+                "</style></head><body>" +
+                "<div class='wrapper'><div class='container'>" +
+                "<div class='header'><div class='success-icon'>✓</div><h1>Congratulations!</h1><p>You are now a SpendSmart Pro member</p></div>" +
+                "<div class='content'>" +
+                "<p>Hello " + user.getFullName() + ",</p>" +
+                "<p>Success! Your payment was processed successfully. You now have full access to all premium features including advanced analytics and custom reports.</p>" +
+                "<div class='receipt-box'>" +
+                "<div class='receipt-row'><span class='receipt-label'>Plan</span><span class='receipt-value'>SpendSmart PRO</span></div>" +
+                "<div class='receipt-row'><span class='receipt-label'>Transaction ID</span><span class='receipt-value'>#" + notification.getRelatedId() + "</span></div>" +
+                "<div class='receipt-row'><span class='receipt-label'>Status</span><span class='receipt-value' style='color:#10b981'>PAID</span></div>" +
+                "<div class='total-row receipt-row'><span class='receipt-label'>Total Paid</span><span class='receipt-value'>" + notification.getMessage() + "</span></div>" +
+                "</div>" +
+                "<p>We're excited to help you take control of your financial future.</p>" +
+                "<center><a href='http://localhost:4200/dashboard' class='btn'>Explore Pro Features</a></center>" +
+                "</div>" +
+                "<div class='footer'><p>&copy; " + java.time.Year.now().getValue() + " SpendSmart. Premium Financial Management.</p></div>" +
+                "</div></div></body></html>";
+                
+            helper.setText(htmlContent, true);
+            mailSender.send(mimeMessage);
+            log.info("Premium receipt email sent to {}", email);
+        } catch (Exception e) {
+            log.error("Failed to send premium receipt email", e);
+        }
     }
 
     private void sendEmail(Notification notification) {

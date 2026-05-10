@@ -6,6 +6,8 @@ import com.razorpay.RazorpayException;
 import com.razorpay.Utils;
 import com.spendsmart.payment.client.AuthClient;
 import com.spendsmart.payment.dto.CreateOrderRequest;
+import com.spendsmart.payment.dto.NotificationRequest;
+import com.spendsmart.payment.client.NotificationClient;
 import com.spendsmart.payment.dto.OrderResponse;
 import com.spendsmart.payment.dto.VerifyPaymentRequest;
 import com.spendsmart.payment.entity.Payment;
@@ -34,6 +36,7 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final AuthClient authClient;
+    private final NotificationClient notificationClient;
     private RazorpayClient razorpay;
 
     @PostConstruct
@@ -47,8 +50,8 @@ public class PaymentService {
     private static final String PRO_PLAN = "PRO";
 
     private static final Map<String, BigDecimal> PLAN_PRICES = Map.of(
-            PLAN_MONTHLY, new BigDecimal("199"),
-            PLAN_YEARLY, new BigDecimal("1499")
+            PLAN_MONTHLY, new BigDecimal("539"), // 599 - 10% discount applied
+            PLAN_YEARLY, new BigDecimal("5499")
     );
 
     @Transactional
@@ -108,6 +111,21 @@ public class PaymentService {
                     int duration = payment.getPlanName().equals(PLAN_YEARLY) ? 12 : 1;
                     authClient.upgradeUserPlan(request.getUserId(), PRO_PLAN, duration);
                     log.info("Payment verified and plan upgraded for user: {}", request.getUserId());
+
+                    // Send Premium Receipt Email
+                    try {
+                        notificationClient.sendNotification(NotificationRequest.builder()
+                                .recipientId(payment.getUserId())
+                                .type("PAYMENT_RECEIPT")
+                                .severity("INFO")
+                                .title("Payment Successful")
+                                .message("₹" + payment.getAmount())
+                                .relatedId(payment.getId())
+                                .relatedType("PAYMENT")
+                                .build());
+                    } catch (Exception e) {
+                        log.error("Failed to trigger receipt email: {}", e.getMessage());
+                    }
                 } catch (Exception e) {
                     log.error("Payment verified but Auth Service plan upgrade failed for user: {}. Error: {}", request.getUserId(), e.getMessage());
                     // In a production environment, we would likely trigger a retry or manual intervention event here.

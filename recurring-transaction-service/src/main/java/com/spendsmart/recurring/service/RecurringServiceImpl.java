@@ -58,8 +58,10 @@ public class RecurringServiceImpl implements RecurringService {
                 .paymentMethod(request.getPaymentMethod())
                 .build();
 
-        processTransaction(recurring);
         RecurringTransaction saved = recurringRepository.save(recurring);
+        if (processTransaction(saved)) {
+            saved = recurringRepository.save(saved);
+        }
         return mapToResponse(saved);
     }
 

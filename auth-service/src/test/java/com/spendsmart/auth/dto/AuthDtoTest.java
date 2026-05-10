@@ -19,124 +19,150 @@ class AuthDtoTest {
                 .user(new UserProfileResponse())
                 .build();
 
-        assertEquals("access", response.getAccessToken());
-        assertEquals("refresh", response.getRefreshToken());
-        assertEquals("Bearer", response.getTokenType());
-        assertEquals(3600L, response.getExpiresIn());
-        assertNotNull(response.getUser());
+        AuthResponse response2 = AuthResponse.builder()
+                .accessToken("access")
+                .refreshToken("refresh")
+                .tokenType("Bearer")
+                .expiresIn(3600L)
+                .user(new UserProfileResponse())
+                .build();
+
+        assertEquals(response, response2);
+        assertEquals(response.hashCode(), response2.hashCode());
+        
+        response2.setAccessToken("diff");
+        assertNotEquals(response, response2);
         assertNotNull(response.toString());
+        assertNotNull(AuthResponse.builder().toString());
     }
 
     @Test
     void testLoginRequest() {
-        LoginRequest request = new LoginRequest();
-        request.setEmail("test@test.com");
-        request.setPassword("pass");
-        assertEquals("test@test.com", request.getEmail());
-        assertNotNull(request.toString());
+        LoginRequest req1 = new LoginRequest(); req1.setEmail("t@t.com"); req1.setPassword("p");
+        LoginRequest req2 = new LoginRequest(); req2.setEmail("t@t.com"); req2.setPassword("p");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setEmail("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testRegisterRequest() {
-        RegisterRequest request = new RegisterRequest();
-        request.setEmail("test@test.com");
-        request.setFullName("Test User");
-        request.setPassword("pass");
-        assertEquals("test@test.com", request.getEmail());
-        assertNotNull(request.toString());
+        RegisterRequest req1 = new RegisterRequest(); req1.setEmail("t"); req1.setFullName("n"); req1.setPassword("p");
+        RegisterRequest req2 = new RegisterRequest(); req2.setEmail("t"); req2.setFullName("n"); req2.setPassword("p");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setEmail("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testRefreshTokenRequest() {
-        RefreshTokenRequest request = new RefreshTokenRequest();
-        request.setRefreshToken("token");
-        assertEquals("token", request.getRefreshToken());
-        assertNotNull(request.toString());
+        RefreshTokenRequest req1 = new RefreshTokenRequest(); req1.setRefreshToken("t");
+        RefreshTokenRequest req2 = new RefreshTokenRequest(); req2.setRefreshToken("t");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setRefreshToken("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testForgotPasswordRequest() {
-        ForgotPasswordRequest request = new ForgotPasswordRequest();
-        request.setEmail("test@test.com");
-        assertEquals("test@test.com", request.getEmail());
-        assertNotNull(request.toString());
+        ForgotPasswordRequest req1 = new ForgotPasswordRequest(); req1.setEmail("t");
+        ForgotPasswordRequest req2 = new ForgotPasswordRequest(); req2.setEmail("t");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setEmail("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testVerifyOtpRequest() {
-        VerifyOtpRequest request = new VerifyOtpRequest();
-        request.setEmail("test@test.com");
-        request.setOtp("123456");
-        assertEquals("123456", request.getOtp());
-        assertNotNull(request.toString());
+        VerifyOtpRequest req1 = new VerifyOtpRequest(); req1.setEmail("t"); req1.setOtp("o");
+        VerifyOtpRequest req2 = new VerifyOtpRequest(); req2.setEmail("t"); req2.setOtp("o");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setEmail("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testResetPasswordRequest() {
-        ResetPasswordRequest request = new ResetPasswordRequest();
-        request.setEmail("test@test.com");
-        request.setOtp("123456");
-        request.setNewPassword("newpass");
-        assertEquals("newpass", request.getNewPassword());
-        assertNotNull(request.toString());
+        ResetPasswordRequest req1 = new ResetPasswordRequest(); req1.setEmail("t"); req1.setOtp("o"); req1.setNewPassword("n");
+        ResetPasswordRequest req2 = new ResetPasswordRequest(); req2.setEmail("t"); req2.setOtp("o"); req2.setNewPassword("n");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setEmail("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testChangePasswordRequest() {
-        ChangePasswordRequest request = new ChangePasswordRequest();
-        request.setCurrentPassword("old");
-        request.setNewPassword("new");
-        assertEquals("new", request.getNewPassword());
-        assertNotNull(request.toString());
+        ChangePasswordRequest req1 = new ChangePasswordRequest(); req1.setCurrentPassword("c"); req1.setNewPassword("n");
+        ChangePasswordRequest req2 = new ChangePasswordRequest(); req2.setCurrentPassword("c"); req2.setNewPassword("n");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setCurrentPassword("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testUpdateProfileRequest() {
-        UpdateProfileRequest request = new UpdateProfileRequest();
-        request.setFullName("New Name");
-        request.setAvatarUrl("url");
-        assertEquals("New Name", request.getFullName());
-        assertNotNull(request.toString());
+        UpdateProfileRequest req1 = new UpdateProfileRequest(); req1.setFullName("n"); req1.setAvatarUrl("u");
+        UpdateProfileRequest req2 = new UpdateProfileRequest(); req2.setFullName("n"); req2.setAvatarUrl("u");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setFullName("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testProfileUpdateRequest() {
-        ProfileUpdateRequest request = new ProfileUpdateRequest();
-        request.setFullName("Name");
-        assertEquals("Name", request.getFullName());
-        assertNotNull(request.toString());
+        ProfileUpdateRequest req1 = new ProfileUpdateRequest(); req1.setFullName("n");
+        ProfileUpdateRequest req2 = new ProfileUpdateRequest(); req2.setFullName("n");
+        assertEquals(req1, req2);
+        assertEquals(req1.hashCode(), req2.hashCode());
+        req2.setFullName("d"); assertNotEquals(req1, req2);
+        assertNotNull(req1.toString());
     }
 
     @Test
     void testUserProfileResponse() {
-        UserProfileResponse response = new UserProfileResponse();
-        response.setEmail("test@test.com");
-        response.setFullName("User");
-        assertEquals("User", response.getFullName());
-        assertNotNull(response.toString());
+        UserProfileResponse res1 = new UserProfileResponse(); res1.setEmail("e"); res1.setFullName("n");
+        UserProfileResponse res2 = new UserProfileResponse(); res2.setEmail("e"); res2.setFullName("n");
+        assertEquals(res1, res2);
+        assertEquals(res1.hashCode(), res2.hashCode());
+        res2.setEmail("d"); assertNotEquals(res1, res2);
+        assertNotNull(res1.toString());
     }
 
     @Test
     void testTransactionDTO() {
-        TransactionDTO dto = new TransactionDTO();
-        dto.setDescription("Trans");
-        assertEquals("Trans", dto.getDescription());
-        assertNotNull(dto.toString());
+        TransactionDTO dto1 = new TransactionDTO(); dto1.setDescription("d");
+        TransactionDTO dto2 = new TransactionDTO(); dto2.setDescription("d");
+        assertEquals(dto1, dto2);
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+        dto2.setDescription("diff"); assertNotEquals(dto1, dto2);
+        assertNotNull(dto1.toString());
     }
 
     @Test
     void testPlatformAnalytics() {
-        PlatformAnalytics analytics = new PlatformAnalytics();
-        analytics.setTotalUsers(100L);
-        assertEquals(100L, analytics.getTotalUsers());
-        assertNotNull(analytics.toString());
+        PlatformAnalytics pa1 = new PlatformAnalytics(); pa1.setTotalUsers(100L);
+        PlatformAnalytics pa2 = new PlatformAnalytics(); pa2.setTotalUsers(100L);
+        assertEquals(pa1, pa2);
+        assertEquals(pa1.hashCode(), pa2.hashCode());
+        pa2.setTotalUsers(200L); assertNotEquals(pa1, pa2);
+        assertNotNull(pa1.toString());
     }
 
     @Test
     void testTopUserDTO() {
-        TopUserDTO dto = new TopUserDTO();
-        dto.setFullName("Top");
-        assertEquals("Top", dto.getFullName());
-        assertNotNull(dto.toString());
+        TopUserDTO dto1 = new TopUserDTO(); dto1.setFullName("n");
+        TopUserDTO dto2 = new TopUserDTO(); dto2.setFullName("n");
+        assertEquals(dto1, dto2);
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+        dto2.setFullName("d"); assertNotEquals(dto1, dto2);
+        assertNotNull(dto1.toString());
     }
 }

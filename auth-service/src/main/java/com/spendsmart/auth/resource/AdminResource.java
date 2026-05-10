@@ -91,4 +91,11 @@ public class AdminResource {
                 .header("Content-Disposition", "attachment; filename=platform_report.json")
                 .body(report);
     }
+
+    @PatchMapping("/users/{id}/role")
+    @Operation(summary = "Update user role (Promote/Demote)")
+    public ResponseEntity<ApiResponse<Void>> updateRole(@PathVariable Long id, @RequestParam String role) {
+        adminService.updateUserRole(id, role);
+        return ResponseEntity.ok(ApiResponse.success("User role updated to " + role));
+    }
 }

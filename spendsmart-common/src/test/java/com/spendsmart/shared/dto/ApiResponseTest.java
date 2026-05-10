@@ -94,5 +94,9 @@ class ApiResponseTest {
         assertEquals(response1, response2);
         assertEquals(response1.hashCode(), response2.hashCode());
         assertNotNull(response1.toString());
+        
+        // Cover builder toString
+        String builderToString = ApiResponse.<String>builder().message("test").toString();
+        assertTrue(builderToString.contains("message=test"));
     }
 }

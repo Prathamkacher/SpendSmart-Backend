@@ -39,7 +39,8 @@ public class JwtAuthenticationFilter extends AbstractJwtAuthenticationFilter {
 
     @Override
     protected String authorityForRole(String role) {
-        return "ROLE_" + (role != null ? role : AppConstants.ROLE_USER);
+        if (role == null) return "ROLE_USER";
+        return role.startsWith("ROLE_") ? role : "ROLE_" + role;
     }
 
     @Override

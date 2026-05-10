@@ -18,6 +18,7 @@ public class UserProfileResponse {
     private String        currency;
     private String        timezone;
     private String        avatarUrl;
+    private String        firstInitial;
     private String        bio;
     private User.AuthProvider provider;
     private User.Role     role;

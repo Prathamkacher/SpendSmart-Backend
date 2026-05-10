@@ -63,7 +63,7 @@ class PaymentServiceTest {
 
         assertNotNull(response);
         assertEquals("order_123", response.getId());
-        assertEquals(new BigDecimal("199"), response.getAmount());
+        assertEquals(new BigDecimal("539"), response.getAmount());
         assertEquals("INR", response.getCurrency());
         assertEquals("test_key", response.getKeyId());
         verify(paymentRepository).save(any(Payment.class));
@@ -85,8 +85,8 @@ class PaymentServiceTest {
         verify(paymentRepository).save(paymentCaptor.capture());
 
         assertEquals("order_yearly", response.getId());
-        assertEquals(new BigDecimal("1499"), response.getAmount());
-        assertEquals(new BigDecimal("1499"), paymentCaptor.getValue().getAmount());
+        assertEquals(new BigDecimal("5499"), response.getAmount());
+        assertEquals(new BigDecimal("5499"), paymentCaptor.getValue().getAmount());
         assertEquals(Payment.PaymentStatus.PENDING, paymentCaptor.getValue().getStatus());
         assertEquals("YEARLY", paymentCaptor.getValue().getPlanName());
     }

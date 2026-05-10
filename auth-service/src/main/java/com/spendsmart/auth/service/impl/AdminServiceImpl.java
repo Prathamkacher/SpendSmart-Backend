@@ -14,6 +14,7 @@ import com.spendsmart.shared.exception.ResourceNotFoundException;
 import com.spendsmart.auth.mapper.UserMapper;
 import com.spendsmart.auth.repository.UserRepository;
 import com.spendsmart.auth.service.AdminService;
+import com.spendsmart.auth.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -38,12 +39,19 @@ public class AdminServiceImpl implements AdminService {
     private final ExpenseClient expenseClient;
     private final IncomeClient incomeClient;
     private final RabbitTemplate rabbitTemplate;
+    private final EmailService emailService;
 
     @Override
     public List<UserProfileResponse> getAllUsers() {
         log.info("Admin: Fetching all users");
         return userRepository.findAll().stream()
-                .map(userMapper::toProfileResponse)
+                .map(user -> {
+                    UserProfileResponse resp = userMapper.toProfileResponse(user);
+                    if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+                        resp.setFirstInitial(String.valueOf(user.getFullName().charAt(0)).toUpperCase());
+                    }
+                    return resp;
+                })
                 .toList();
     }
 
@@ -51,9 +59,15 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void suspendUser(Long userId) {
         log.info("Admin: Suspending user {}", userId);
+        if (userId == 3L) {
+            throw new RuntimeException("Super-admin cannot be suspended");
+        }
         User user = findUserOrThrow(userId);
         user.setIsActive(false);
         userRepository.save(user);
+        
+        // Send suspension notification email
+        emailService.sendAccountSuspendedEmail(user.getEmail(), user.getFullName());
     }
 
     @Override
@@ -63,16 +77,26 @@ public class AdminServiceImpl implements AdminService {
         User user = findUserOrThrow(userId);
         user.setIsActive(true);
         userRepository.save(user);
+        
+        // Send reactivation notification email
+        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFullName());
     }
 
     @Override
     @Transactional
     public void deleteUser(Long userId) {
         log.info("Admin: Deleting user {}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("User not found");
+        if (userId == 3L) {
+            throw new RuntimeException("Super-admin cannot be deleted");
         }
+        User user = findUserOrThrow(userId);
+        String email = user.getEmail();
+        String fullName = user.getFullName();
+        
         userRepository.deleteById(userId);
+        
+        // Send deletion notification email (after delete so we still have user data)
+        emailService.sendAccountDeletedEmail(email, fullName);
     }
 
     @Override
@@ -179,6 +203,26 @@ public class AdminServiceImpl implements AdminService {
         report.put("userCount", users.size());
         
         return report.toString().getBytes();
+    }
+
+    @Override
+    @Transactional
+    public void updateUserRole(Long userId, String role) {
+        log.info("Admin: Updating role for user {} to {}", userId, role);
+        if (userId == 3L) {
+            throw new RuntimeException("Super-admin role cannot be modified");
+        }
+        User user = findUserOrThrow(userId);
+        try {
+            User.Role newRole = User.Role.valueOf(role.toUpperCase());
+            user.setRole(newRole);
+            userRepository.save(user);
+            
+            // Send role change email
+            emailService.sendRoleUpdateEmail(user.getEmail(), user.getFullName(), newRole.name());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid role: " + role);
+        }
     }
 
     private User findUserOrThrow(Long userId) {

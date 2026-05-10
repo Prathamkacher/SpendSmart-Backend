@@ -12,7 +12,7 @@ public class RegisterRequest {
 
     @NotBlank(message = "Full name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
-    @Pattern(regexp = "^[A-Za-z]+(?: [A-Za-z]+)*$", message = "Name must contain only letters and single spaces")
+    @Pattern(regexp = "^[A-Za-z]++(?: [A-Za-z]++){0,49}$", message = "Name must contain only letters and single spaces")
     private String fullName;
 
     @NotBlank(message = "Email is required")

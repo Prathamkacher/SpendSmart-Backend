@@ -264,10 +264,26 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         }
 
         double savingsRate = income.subtract(expenses).divide(income, 4, RoundingMode.HALF_UP).doubleValue() * 100;
+        
         double budgetAdherence = 100;
-        if (budget.compareTo(BigDecimal.ZERO) > 0) {
-            budgetAdherence = budget.subtract(expenses).divide(budget, 4, RoundingMode.HALF_UP).doubleValue() * 100;
+        try {
+            ApiResponse<java.util.List<BudgetDto>> activeBudgetsResponse = budgetServiceClient.getActiveBudgets();
+            if (isResponseValid(activeBudgetsResponse) && !activeBudgetsResponse.getData().isEmpty()) {
+                BigDecimal totalBudgetLimit = BigDecimal.ZERO;
+                BigDecimal totalBudgetSpent = BigDecimal.ZERO;
+                for (BudgetDto b : activeBudgetsResponse.getData()) {
+                    if (b.getLimitAmount() != null) totalBudgetLimit = totalBudgetLimit.add(b.getLimitAmount());
+                    if (b.getSpentAmount() != null) totalBudgetSpent = totalBudgetSpent.add(b.getSpentAmount());
+                }
+                if (totalBudgetLimit.compareTo(BigDecimal.ZERO) > 0) {
+                    budgetAdherence = totalBudgetLimit.subtract(totalBudgetSpent)
+                            .divide(totalBudgetLimit, 4, RoundingMode.HALF_UP).doubleValue() * 100;
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error calculating active budget adherence", e);
         }
+
         double expenseRatio = expenses.divide(income, 4, RoundingMode.HALF_UP).doubleValue() * 100;
 
         double savingsScore = Math.max(0, Math.min(100, savingsRate * 2));

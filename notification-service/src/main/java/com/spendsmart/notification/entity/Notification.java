@@ -58,7 +58,7 @@ public class Notification {
     }
 
     public enum NotificationType {
-        BUDGET_ALERT, RECURRING_DUE, MONTHLY_SUMMARY, SYSTEM
+        BUDGET_ALERT, RECURRING_DUE, MONTHLY_SUMMARY, SYSTEM, PAYMENT_RECEIPT
     }
 
     public enum Severity {

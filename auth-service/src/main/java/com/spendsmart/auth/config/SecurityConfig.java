@@ -15,9 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.spendsmart.shared.security.CsrfCookieFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -51,21 +48,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
-        requestHandler.setCsrfRequestAttributeName("_csrf");
-
         http
-            // Enable CSRF — fixed security hotspot
-            .csrf(csrf -> csrf
-                    .csrfTokenRepository(new CookieCsrfTokenRepository())
-                    .csrfTokenRequestHandler(requestHandler)
-                    .ignoringRequestMatchers(PUBLIC_URLS)
-            )
+            // Disable CSRF — this is a JWT-based stateless API.
+            // The JWT in the Authorization header provides inherent CSRF protection
+            // since it is NOT automatically sent by the browser (unlike cookies).
+            .csrf(AbstractHttpConfigurer::disable)
 
             // CORS handled by Gateway
             .cors(AbstractHttpConfigurer::disable)
 
-            // Stateless — no HTTP sessions
+            // Sessions only for OAuth2 login flow
             .sessionManagement(session ->
             		session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
@@ -73,12 +65,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(PUBLIC_URLS).permitAll()
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // preflight
+                    .requestMatchers("/auth/admin/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
             )
 
             // OAuth2 login
             .oauth2Login(oauth2 -> oauth2
-                    // Dedicated handler: creates/finds user in DB, issues proper JWT + refresh token
                     .successHandler(oauth2LoginSuccessHandler)
                     .failureHandler((request, response, exception) ->
                             response.sendRedirect(frontendUrl + "/auth/login?error=oauth_failed")
@@ -94,8 +86,7 @@ public class SecurityConfig {
             )
 
             // JWT filter runs before Spring's username/password filter
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterAfter(new CsrfCookieFilter(), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

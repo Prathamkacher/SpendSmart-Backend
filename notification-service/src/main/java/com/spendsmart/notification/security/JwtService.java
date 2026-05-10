@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService extends AbstractJwtService {
 
-    @Value("${app.jwt.secret}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     public String extractUsername(String token) {

@@ -17,4 +17,5 @@ public interface AdminService {
     List<TopUserDTO> getTopSpendingUsers();
     void sendGlobalNotification(String title, String message, String severity);
     byte[] exportPlatformReport();
+    void updateUserRole(Long userId, String role);
 }
