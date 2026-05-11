@@ -53,6 +53,8 @@ public class RecurringTransaction {
     private Boolean isActive = true;
 
     private String description;
+    
+    private String incomeSource;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;

@@ -46,7 +46,7 @@ class EntityTest {
         assertEquals(now, entity.getCreatedAt());
         assertEquals(now, entity.getUpdatedAt());
 
-        RecurringTransaction entity2 = new RecurringTransaction(1L, 2L, 3L, "Rent", new BigDecimal("1000.00"), TransactionType.EXPENSE, Frequency.MONTHLY, today, today.plusYears(1), today.plusMonths(1), true, "Desc", PaymentMethod.BANK, now, now);
+        RecurringTransaction entity2 = new RecurringTransaction(1L, 2L, 3L, "Rent", new BigDecimal("1000.00"), TransactionType.EXPENSE, Frequency.MONTHLY, today, today.plusYears(1), today.plusMonths(1), true, "Desc", null, PaymentMethod.BANK, now, now);
         assertEquals(1L, entity2.getRecurringId());
         
         RecurringTransaction entity4 = RecurringTransaction.builder()

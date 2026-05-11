@@ -87,7 +87,7 @@ class RecurringDtoTest {
         assertEquals("Desc", request.getDescription());
         assertEquals(PaymentMethod.BANK, request.getPaymentMethod());
 
-        RecurringRequest request2 = new RecurringRequest(2L, "Netflix", new BigDecimal("15.99"), TransactionType.EXPENSE, Frequency.MONTHLY, today, today.plusYears(1), "Desc", PaymentMethod.BANK);
+        RecurringRequest request2 = new RecurringRequest(2L, "Netflix", new BigDecimal("15.99"), TransactionType.EXPENSE, Frequency.MONTHLY, today, today.plusYears(1), "Desc", null, false, PaymentMethod.BANK);
         
         assertEquals(request, request2);
         assertEquals(request.hashCode(), request2.hashCode());

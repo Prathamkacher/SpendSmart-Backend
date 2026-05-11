@@ -10,6 +10,9 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      default-filters:
+        - AddResponseHeader=Permissions-Policy, accelerometer=*, gyroscope=*, magnetometer=*, camera=(), microphone=()
+        - AddResponseHeader=Content-Security-Policy, upgrade-insecure-requests
       
       # Route Definitions
       routes:
@@ -209,7 +212,10 @@ spring:
               - PATCH
               - OPTIONS
             allowedHeaders: "*"
-            exposedHeaders: "Authorization"
+            exposedHeaders: 
+              - Authorization
+              - x-rtb-fingerprint-id
+              - request-id
             allowCredentials: true
             maxAge: 3600
 

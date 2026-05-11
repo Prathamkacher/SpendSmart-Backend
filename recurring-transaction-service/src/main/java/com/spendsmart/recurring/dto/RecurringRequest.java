@@ -41,6 +41,7 @@ public class RecurringRequest {
     private LocalDate endDate;
 
     private String description;
-
+    private String incomeSource;
+    private boolean skipFirstGeneration;
     private PaymentMethod paymentMethod;
 }

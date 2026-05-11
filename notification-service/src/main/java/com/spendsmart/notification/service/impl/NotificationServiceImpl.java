@@ -45,9 +45,11 @@ public class NotificationServiceImpl implements NotificationService {
             sendEmail(saved);
         }
         
+        /*
         if (saved.getType() == Notification.NotificationType.PAYMENT_RECEIPT) {
             sendReceiptEmail(saved);
         }
+        */
 
         return mapToDTO(saved);
     }

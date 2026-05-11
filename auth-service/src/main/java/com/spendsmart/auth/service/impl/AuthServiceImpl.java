@@ -89,6 +89,7 @@ public class AuthServiceImpl implements AuthService {
         emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getFullName());
         emailService.sendAdminNotificationNewUser(adminEmail, savedUser);
         
+        publishSubscriptionEvent(savedUser, "welcome", "Welcome to SpendSmart! We're excited to have you here.");
         publishAuthEvent(AuthEvent.EventType.USER_REGISTERED, savedUser);
         return buildAuthResponse(savedUser);
     }
@@ -269,6 +270,11 @@ public class AuthServiceImpl implements AuthService {
         } else if (newPlan == User.PlanType.PRO) {
             int months = durationMonths != null ? durationMonths : 1;
             user.setPlanExpiryDate(LocalDateTime.now().plusMonths(months));
+            publishSubscriptionEvent(user, "pro.activated", "Welcome to SpendSmart PRO! Your premium features are now active.");
+            
+            // Send official activation email with PDF invoice
+            double amount = (months >= 12) ? 5499.0 : 539.0;
+            emailService.sendPremiumActivationEmail(user.getEmail(), user.getFullName(), "PRO " + (months >= 12 ? "Yearly" : "Monthly"), amount);
         }
         userRepository.save(user);
     }
