@@ -13,6 +13,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link Expense} entities.
+ * Supports paginated queries, complex aggregations for analytics, and full-text keyword searches.
+ */
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 

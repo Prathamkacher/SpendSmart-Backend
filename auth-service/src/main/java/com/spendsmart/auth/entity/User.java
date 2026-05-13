@@ -9,6 +9,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a user in the SpendSmart system.
+ * Stores core profile data, security settings, and subscription status.
+ */
 @Entity
 @Table(name = "users")
 @Data

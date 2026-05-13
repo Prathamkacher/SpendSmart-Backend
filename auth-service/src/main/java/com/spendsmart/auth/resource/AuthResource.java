@@ -19,6 +19,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller for authentication and user management.
+ * Provides endpoints for registration, login, token refresh, password resets, and profile management.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/auth")

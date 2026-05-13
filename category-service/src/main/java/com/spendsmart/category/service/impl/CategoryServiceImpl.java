@@ -20,6 +20,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service implementation for managing budget categories.
+ * Handles creation, retrieval, updates, and deletion of categories for users.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── CREATE ───────────────────────────────────────────────────────
 
+    /**
+     * Creates a new category for a specific user.
+     * Checks for duplicate category names (case-insensitive) for the same user and type.
+     *
+     * @param userId The ID of the user creating the category.
+     * @param request The category details including name, icon, color, and type.
+     * @return CategoryResponse containing the created category details.
+     * @throws DuplicateCategoryException if a category with the same name and type already exists for the user.
+     */
     @Override
     @Transactional
     public CategoryResponse createCategory(Long userId, CategoryRequest request) {
@@ -55,6 +68,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── READ ─────────────────────────────────────────────────────────
 
+    /**
+     * Retrieves all categories belonging to a specific user.
+     *
+     * @param userId The ID of the user whose categories are to be fetched.
+     * @return List of CategoryResponse objects ordered by name.
+     */
     @Override
     public List<CategoryResponse> getByUser(Long userId) {
         log.debug("Fetching categories for userId={}", userId);
@@ -64,12 +83,27 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    /**
+     * Retrieves a specific category by its ID, ensuring it belongs to the specified user.
+     *
+     * @param userId The ID of the user requesting the category.
+     * @param categoryId The ID of the category to retrieve.
+     * @return CategoryResponse details.
+     * @throws CategoryNotFoundException if the category does not exist or does not belong to the user.
+     */
     @Override
     public CategoryResponse getCategoryById(Long userId, Long categoryId) {
         Category category = findCategoryOrThrow(categoryId, userId);
         return categoryMapper.toResponse(category);
     }
 
+    /**
+     * Retrieves categories of a specific type (INCOME/EXPENSE) for a user.
+     *
+     * @param userId The ID of the user.
+     * @param type The type of category to fetch.
+     * @return List of CategoryResponse objects of the specified type.
+     */
     @Override
     public List<CategoryResponse> getByUserAndType(Long userId, CategoryType type) {
         log.debug("Fetching categories for userId={}, type={}", userId, type);
@@ -79,6 +113,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    /**
+     * Retrieves all default categories defined in the system.
+     *
+     * @return List of default CategoryResponse objects.
+     */
     @Override
     public List<CategoryResponse> getDefaultCategories() {
         return categoryRepository.findByIsDefaultTrue()
@@ -87,11 +126,24 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    /**
+     * Returns the total count of categories for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @return Total number of categories.
+     */
     @Override
     public long getCategoryCount(Long userId) {
         return categoryRepository.countByUserId(userId);
     }
 
+    /**
+     * Retrieves a map of category IDs to category names for a specific user.
+     * Useful for lookups in other services.
+     *
+     * @param userId The ID of the user.
+     * @return Map containing Category ID as key and Category Name as value.
+     */
     @Override
     public java.util.Map<Long, String> getCategoryNames(Long userId) {
         log.debug("Fetching category names for userId={}", userId);
@@ -103,6 +155,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── UPDATE ───────────────────────────────────────────────────────
 
+    /**
+     * Updates an existing category for a user.
+     * Validates that the name change does not result in a duplicate.
+     *
+     * @param userId The ID of the user.
+     * @param categoryId The ID of the category to update.
+     * @param request The updated category details.
+     * @return CategoryResponse with updated details.
+     * @throws DuplicateCategoryException if the updated name already exists for the same user and type.
+     */
     @Override
     @Transactional
     public CategoryResponse updateCategory(Long userId, Long categoryId, CategoryRequest request) {
@@ -122,6 +184,14 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponse(updated);
     }
 
+    /**
+     * Sets or updates the budget limit for a specific category.
+     *
+     * @param userId The ID of the user.
+     * @param categoryId The ID of the category.
+     * @param budgetLimit The new budget limit.
+     * @return CategoryResponse with the updated budget limit.
+     */
     @Override
     @Transactional
     public CategoryResponse setCategoryBudget(Long userId, Long categoryId, BigDecimal budgetLimit) {
@@ -135,6 +205,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── DELETE ────────────────────────────────────────────────────────
 
+    /**
+     * Deletes a category for a specific user.
+     *
+     * @param userId The ID of the user.
+     * @param categoryId The ID of the category to delete.
+     * @throws CategoryNotFoundException if category does not exist or belong to user.
+     */
     @Override
     @Transactional
     public void deleteCategory(Long userId, Long categoryId) {
@@ -146,6 +223,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── DEFAULT SEEDING ──────────────────────────────────────────────
 
+    /**
+     * Initializes default categories (Food, Transport, Bills, etc.) for a new user.
+     * Only seeds categories that the user doesn't already have by name.
+     *
+     * @param userId The ID of the user to seed categories for.
+     */
     @Override
     @Transactional
     public void initDefaultCategories(Long userId) {
@@ -176,6 +259,9 @@ public class CategoryServiceImpl implements CategoryService {
         log.info("Default categories check completed for user: {}", userId);
     }
 
+    /**
+     * Helper method to seed a category if it doesn't already exist in the provided list of names.
+     */
     private void seedIfMissing(Long userId, String name, CategoryType type, String icon, String colorCode, List<String> existing) {
         if (!existing.contains(name.toLowerCase())) {
             createDefault(userId, name, type, icon, colorCode);
@@ -184,11 +270,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     // ── Private helpers ──────────────────────────────────────────────
 
+    /**
+     * Finds a category by ID and user ID or throws a CategoryNotFoundException.
+     */
     private Category findCategoryOrThrow(Long categoryId, Long userId) {
         return categoryRepository.findByCategoryIdAndUserId(categoryId, userId)
                 .orElseThrow(() -> new CategoryNotFoundException(categoryId));
     }
 
+    /**
+     * Persists a default category for a user.
+     */
     private void createDefault(Long userId, String name, CategoryType type, String icon, String colorCode) {
         Category category = Category.builder()
                 .userId(userId)

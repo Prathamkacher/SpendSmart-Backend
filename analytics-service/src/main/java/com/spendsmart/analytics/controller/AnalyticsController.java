@@ -19,6 +19,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * REST controller for financial analytics and reporting.
+ * Provides endpoints for monthly/yearly summaries, category breakdowns, trends, and reports.
+ */
 @RestController
 @RequestMapping("/analytics")
 @RequiredArgsConstructor

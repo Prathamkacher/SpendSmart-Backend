@@ -8,6 +8,10 @@ import org.mapstruct.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * MapStruct mapper for converting between Budget entities and DTOs.
+ * Includes custom logic for calculating budget progress and status.
+ */
 @Mapper(componentModel = "spring")
 public interface BudgetMapper {
 

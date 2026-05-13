@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link FinancialSnapshot} entities.
+ * Provides custom queries for calculating historical trends and averages.
+ */
 @Repository
 public interface AnalyticsRepository extends JpaRepository<FinancialSnapshot, Long> {
 

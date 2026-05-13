@@ -7,6 +7,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+/**
+ * MapStruct mapper for converting between {@link Income} entities and DTOs.
+ */
 @Mapper(componentModel = "spring")
 public interface IncomeMapper {
 

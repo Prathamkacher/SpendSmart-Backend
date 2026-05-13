@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 
+/**
+ * Feign client for communicating with the Budget service.
+ * Used to fetch budget constraints for financial health calculations.
+ */
 @FeignClient(name = "budget-service", path = "/api")
 public interface BudgetServiceClient {
 

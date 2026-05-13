@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * Interceptor for Feign clients to propagate the JWT token from the incoming request
+ * to the outgoing downstream service calls.
+ */
 @Configuration
 public class FeignConfig {
 

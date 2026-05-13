@@ -25,6 +25,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * REST controller for income management.
+ * Provides endpoints for recording and tracking user income across different sources.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/incomes")

@@ -9,6 +9,10 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * OpenAPI configuration for the Expense service.
+ * Configures Swagger UI with JWT security schemes for API documentation.
+ */
 @Configuration
 public class SwaggerConfig {
 

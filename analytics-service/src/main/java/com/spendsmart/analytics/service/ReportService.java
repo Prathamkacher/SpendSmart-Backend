@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * Service for generating financial reports.
+ * Currently supports CSV report generation for monthly data.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

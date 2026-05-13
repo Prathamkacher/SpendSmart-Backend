@@ -5,6 +5,10 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a system or user notification.
+ * Stores message content, delivery status, and severity levels for user alerts.
+ */
 @Entity
 @Table(name = "notifications")
 @Getter

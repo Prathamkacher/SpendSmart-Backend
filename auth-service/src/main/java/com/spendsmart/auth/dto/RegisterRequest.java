@@ -4,6 +4,10 @@ package com.spendsmart.auth.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+/**
+ * Data Transfer Object for new user registration.
+ * Includes comprehensive validation for name, email, and password complexity.
+ */
 @Data
 @Builder
 @NoArgsConstructor

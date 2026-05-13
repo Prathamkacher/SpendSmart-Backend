@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * Data Transfer Object for resetting a password using an OTP.
+ */
 @Data
 public class ResetPasswordRequest {
     @NotBlank(message = "Email is required")

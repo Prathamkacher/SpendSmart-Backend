@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Map;
 
+/**
+ * Feign client for communicating with the Category service.
+ * Retrieves category names and metadata for expense classification.
+ */
 @FeignClient(name = "category-service", path = "/api", fallback = CategoryServiceFallback.class)
 public interface CategoryServiceClient {
 

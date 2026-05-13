@@ -10,6 +10,10 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for OpenAPI/Swagger documentation.
+ * Defines the API information and security schemes (JWT Bearer) for the Auth service.
+ */
 @Configuration
 public class SwaggerConfig {
 

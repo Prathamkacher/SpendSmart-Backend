@@ -3,6 +3,10 @@ package com.spendsmart.auth.dto;
 
 import lombok.*;
 
+/**
+ * Data Transfer Object for authentication responses.
+ * Contains access and refresh tokens, token metadata, and user profile details.
+ */
 @Data
 @Builder
 @NoArgsConstructor

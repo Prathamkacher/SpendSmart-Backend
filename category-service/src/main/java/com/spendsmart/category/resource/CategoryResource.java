@@ -21,6 +21,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller for managing budget categories.
+ * Provides endpoints for CRUD operations on user categories and default seeding.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/categories")
@@ -32,6 +36,13 @@ public class CategoryResource {
 
     // ── POST /api/categories ────────────────────────────────────────
 
+    /**
+     * Creates a new category for the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @param categoryRequest Request body containing category details.
+     * @return ApiResponse containing the created category.
+     */
     @PostMapping
     @Operation(summary = "Create a new category")
     public ResponseEntity<ApiResponse<CategoryResponse>> createCategory(
@@ -46,6 +57,12 @@ public class CategoryResource {
 
     // ── GET /api/categories ─────────────────────────────────────────
 
+    /**
+     * Fetches all categories belonging to the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @return ApiResponse containing a list of categories.
+     */
     @GetMapping
     @Operation(summary = "Get all categories for the authenticated user")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getUserCategories(
@@ -58,6 +75,13 @@ public class CategoryResource {
 
     // ── GET /api/categories/{id} ────────────────────────────────────
 
+    /**
+     * Fetches a specific category by its ID.
+     *
+     * @param request HTTP request containing user context.
+     * @param id The ID of the category.
+     * @return ApiResponse containing the category details.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Get category by ID")
     public ResponseEntity<ApiResponse<CategoryResponse>> getCategoryById(
@@ -71,6 +95,13 @@ public class CategoryResource {
 
     // ── GET /api/categories/type ────────────────────────────────────
 
+    /**
+     * Fetches categories filtered by type (EXPENSE or INCOME).
+     *
+     * @param request HTTP request containing user context.
+     * @param type The category type to filter by.
+     * @return ApiResponse containing filtered categories.
+     */
     @GetMapping("/type")
     @Operation(summary = "Get categories filtered by type (EXPENSE or INCOME)")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getCategoriesByType(
@@ -84,6 +115,11 @@ public class CategoryResource {
 
     // ── GET /api/categories/defaults ────────────────────────────────
 
+    /**
+     * Fetches all default template categories available in the system.
+     *
+     * @return ApiResponse containing default categories.
+     */
     @GetMapping("/defaults")
     @Operation(summary = "Get all default (template) categories")
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getDefaultCategories() {
@@ -93,6 +129,14 @@ public class CategoryResource {
 
     // ── PUT /api/categories/{id} ────────────────────────────────────
 
+    /**
+     * Updates an existing category for the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @param id The ID of the category to update.
+     * @param categoryRequest Updated category details.
+     * @return ApiResponse containing updated category.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing category")
     public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(
@@ -107,6 +151,14 @@ public class CategoryResource {
 
     // ── PUT /api/categories/{id}/budget ─────────────────────────────
 
+    /**
+     * Sets or updates the budget limit for a specific category.
+     *
+     * @param request HTTP request containing user context.
+     * @param id The ID of the category.
+     * @param body Map containing "budgetLimit".
+     * @return ApiResponse containing the category with updated budget.
+     */
     @PutMapping("/{id}/budget")
     @Operation(summary = "Set budget limit for a category")
     public ResponseEntity<ApiResponse<CategoryResponse>> setCategoryBudget(
@@ -122,6 +174,13 @@ public class CategoryResource {
 
     // ── DELETE /api/categories/{id} ─────────────────────────────────
 
+    /**
+     * Deletes a category belonging to the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @param id The ID of the category to delete.
+     * @return ApiResponse indicating success.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a category")
     public ResponseEntity<ApiResponse<Void>> deleteCategory(
@@ -135,6 +194,12 @@ public class CategoryResource {
 
     // ── GET /api/categories/count ───────────────────────────────────
 
+    /**
+     * Returns the total count of categories for the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @return ApiResponse containing the count.
+     */
     @GetMapping("/count")
     @Operation(summary = "Get total category count for user")
     public ResponseEntity<ApiResponse<Long>> getCategoryCount(HttpServletRequest request) {
@@ -146,6 +211,12 @@ public class CategoryResource {
 
     // ── POST /api/categories/init ───────────────────────────────────
 
+    /**
+     * Manually triggers the seeding of default categories for the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @return ApiResponse indicating success.
+     */
     @PostMapping("/init")
     @Operation(summary = "Manually trigger default category seeding for the authenticated user")
     public ResponseEntity<ApiResponse<Void>> initDefaults(HttpServletRequest request) {
@@ -156,6 +227,12 @@ public class CategoryResource {
                 .body(ApiResponse.success(AppConstants.DEFAULTS_SEEDED));
     }
 
+    /**
+     * Returns a map of category IDs to names for the authenticated user.
+     *
+     * @param request HTTP request containing user context.
+     * @return ApiResponse containing the ID-to-Name map.
+     */
     @GetMapping("/names")
     @Operation(summary = "Get a map of category IDs to names for the user")
     public ResponseEntity<ApiResponse<Map<Long, String>>> getCategoryNames(HttpServletRequest request) {
@@ -165,6 +242,13 @@ public class CategoryResource {
 
     // ── Private helpers ─────────────────────────────────────────────
 
+    /**
+     * Extracts the user ID from request attributes, handling potential type mismatches.
+     *
+     * @param request The HTTP request.
+     * @return The extracted user ID.
+     * @throws UnauthorizedAccessException if user ID is missing.
+     */
     private Long extractUserId(HttpServletRequest request) {
         Object userIdObj = request.getAttribute("userId");
         if (userIdObj == null) {

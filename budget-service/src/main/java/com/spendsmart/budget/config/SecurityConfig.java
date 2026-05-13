@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Security configuration for the Budget Service.
+ * Configures stateless JWT-based authentication for budget management endpoints.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

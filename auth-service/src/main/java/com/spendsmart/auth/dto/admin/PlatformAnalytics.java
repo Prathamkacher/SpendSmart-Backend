@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Map;
 
+/**
+ * Data Transfer Object for high-level platform analytics.
+ * Summarizes user activity, transaction volume, and financial trends.
+ */
 @Data
 @Builder
 @AllArgsConstructor

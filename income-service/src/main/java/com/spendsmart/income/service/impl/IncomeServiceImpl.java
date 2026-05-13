@@ -21,6 +21,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@link IncomeService}.
+ * Manages the persistence and retrieval of user income records.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

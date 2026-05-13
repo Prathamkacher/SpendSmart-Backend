@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link RefreshToken} entities.
+ * Provides custom queries for token revocation and cleanup.
+ */
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 

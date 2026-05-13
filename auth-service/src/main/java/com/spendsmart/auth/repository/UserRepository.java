@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link User} entities.
+ * Supports lookups by email, status, and subscription plans.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 

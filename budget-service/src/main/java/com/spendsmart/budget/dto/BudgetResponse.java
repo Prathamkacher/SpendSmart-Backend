@@ -6,6 +6,10 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object for budget information.
+ * Includes calculated progress and status metrics.
+ */
 @Data
 @Builder
 @NoArgsConstructor

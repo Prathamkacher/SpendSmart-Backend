@@ -3,6 +3,9 @@ package com.spendsmart.expense.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Exception thrown when a requested expense cannot be found in the system.
+ */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class ExpenseNotFoundException extends RuntimeException {
 

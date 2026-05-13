@@ -5,6 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * Entry point for the Budget Service.
+ * Manages user budgets, category limits, and spending alerts.
+ */
 @SpringBootApplication
 @EnableFeignClients
 @EnableScheduling

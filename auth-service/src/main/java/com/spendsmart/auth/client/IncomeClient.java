@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
+/**
+ * Feign client for communicating with the Income service.
+ * Used for administrative data aggregation and platform statistics.
+ */
 @FeignClient(name = "income-service", path = "/api/incomes")
 public interface IncomeClient {
 

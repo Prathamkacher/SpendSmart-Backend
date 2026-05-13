@@ -22,6 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Implementation of the {@link ExpenseService}.
+ * Manages the persistence of expense records and coordinates with the {@link BudgetServiceClient}
+ * to ensure spending limits are updated in real-time.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

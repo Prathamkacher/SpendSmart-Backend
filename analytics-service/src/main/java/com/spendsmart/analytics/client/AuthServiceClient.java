@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+/**
+ * Feign client for communicating with the Auth service.
+ * Used to fetch user information and ID lists for global analytics.
+ */
 @FeignClient(name = "auth-service", path = "/api")
 public interface AuthServiceClient {
 

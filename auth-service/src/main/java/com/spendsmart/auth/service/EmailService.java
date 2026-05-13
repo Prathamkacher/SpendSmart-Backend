@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.awt.Color;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Service for sending system emails.
+ * Handles welcome emails, OTPs, admin notifications, and account status updates.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,6 +52,12 @@ public class EmailService {
                 "</div></div></body></html>";
     }
 
+    /**
+     * Sends an OTP email for password reset.
+     *
+     * @param toEmail Recipient email.
+     * @param otp The One-Time Password.
+     */
     @Async
     public void sendOtpEmail(String toEmail, String otp) {
         log.info("Sending OTP email to: {}", toEmail);
@@ -74,6 +84,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Sends a welcome email to a newly registered user.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     */
     @Async
     public void sendWelcomeEmail(String toEmail, String fullName) {
         log.info("Sending welcome email to: {}", toEmail);
@@ -98,6 +114,12 @@ public class EmailService {
         }
     }
     
+    /**
+     * Notifies the admin about a new user registration.
+     *
+     * @param adminEmail Admin's email address.
+     * @param user The new user entity.
+     */
     @Async
     public void sendAdminNotificationNewUser(String adminEmail, User user) {
         log.info("Sending new user notification to admin: {}", adminEmail);
@@ -125,6 +147,14 @@ public class EmailService {
         }
     }
 
+    /**
+     * Sends an email confirming premium plan activation with an attached PDF invoice.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     * @param planName Name of the activated plan.
+     * @param amount Amount paid.
+     */
     @Async
     public void sendPremiumActivationEmail(String toEmail, String fullName, String planName, Double amount) {
         log.info("Sending premium activation email with invoice to: {}", toEmail);
@@ -218,6 +248,13 @@ public class EmailService {
         }
     }
 
+    /**
+     * Notifies a user about a change in their account role.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     * @param newRole The new role assigned.
+     */
     @Async
     public void sendRoleUpdateEmail(String toEmail, String fullName, String newRole) {
         log.info("Sending role update email to: {}", toEmail);
@@ -249,6 +286,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Notifies a user that their account has been suspended.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     */
     @Async
     public void sendAccountSuspendedEmail(String toEmail, String fullName) {
         log.info("Sending account suspension email to: {}", toEmail);
@@ -283,6 +326,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Notifies a user that their account has been reactivated.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     */
     @Async
     public void sendAccountActivatedEmail(String toEmail, String fullName) {
         log.info("Sending account reactivation email to: {}", toEmail);
@@ -317,6 +366,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * Notifies a user that their account has been deleted.
+     *
+     * @param toEmail Recipient email.
+     * @param fullName User's full name.
+     */
     @Async
     public void sendAccountDeletedEmail(String toEmail, String fullName) {
         log.info("Sending account deletion email to: {}", toEmail);

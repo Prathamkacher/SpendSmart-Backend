@@ -18,6 +18,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * REST controller for budget management.
+ * Provides endpoints for creating, retrieving, updating, and deleting user budgets.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/budgets")

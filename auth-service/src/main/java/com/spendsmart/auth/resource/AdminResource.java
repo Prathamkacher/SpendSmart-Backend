@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller for administrative operations.
+ * Provides APIs for user management, transaction monitoring, and platform analytics.
+ * Accessible only to users with the 'ADMIN' role.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/auth/admin")

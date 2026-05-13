@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Service interface for income management.
+ * Defines core operations for tracking user earnings and generating financial summaries.
+ */
 public interface IncomeService {
 
     IncomeResponse addIncome(Long userId, IncomeRequest request);

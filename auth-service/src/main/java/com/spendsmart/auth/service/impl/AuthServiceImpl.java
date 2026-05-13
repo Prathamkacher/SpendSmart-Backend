@@ -38,6 +38,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service implementation for authentication and user management.
+ * Handles user registration, login, logout, profile management, password resets,
+ * and subscription plans.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -62,6 +67,14 @@ public class AuthServiceImpl implements AuthService {
     @Value("${spring.mail.username:admin@spendsmart.com}")
     private String adminEmail;
 
+    /**
+     * Registers a new user in the system.
+     * Validates email uniqueness and sets default user properties.
+     *
+     * @param request Registration details.
+     * @return AuthResponse containing access and refresh tokens.
+     * @throws AuthException if email already exists.
+     */
     @Override
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -94,6 +107,13 @@ public class AuthServiceImpl implements AuthService {
         return buildAuthResponse(savedUser);
     }
 
+    /**
+     * Authenticates a user and generates security tokens.
+     *
+     * @param request Login credentials.
+     * @return AuthResponse containing access and refresh tokens.
+     * @throws AuthException if credentials are invalid or account is deactivated.
+     */
     @Override
     @Transactional
     public AuthResponse login(LoginRequest request) {
@@ -117,6 +137,11 @@ public class AuthServiceImpl implements AuthService {
         return buildAuthResponse(user);
     }
 
+    /**
+     * Logs out a user by revoking all their refresh tokens.
+     *
+     * @param userId The ID of the user.
+     */
     @Override
     @Transactional
     public void logout(Long userId) {
@@ -125,6 +150,13 @@ public class AuthServiceImpl implements AuthService {
         log.info("User {} logged out", userId);
     }
 
+    /**
+     * Generates a new access token using a valid refresh token.
+     *
+     * @param token The refresh token string.
+     * @return AuthResponse with new tokens.
+     * @throws AuthException if token is invalid or expired.
+     */
     @Override
     @Transactional
     public AuthResponse refreshToken(String token) {
@@ -139,6 +171,12 @@ public class AuthServiceImpl implements AuthService {
         return buildAuthResponse(user);
     }
 
+    /**
+     * Retrieves a user's profile by their ID.
+     *
+     * @param userId The ID of the user.
+     * @return UserProfileResponse details.
+     */
     @Override
     @Transactional(readOnly = true)
     public UserProfileResponse getUserById(Long userId) {
@@ -150,6 +188,12 @@ public class AuthServiceImpl implements AuthService {
         return resp;
     }
 
+    /**
+     * Retrieves a user's profile by their email address.
+     *
+     * @param email The email of the user.
+     * @return UserProfileResponse details.
+     */
     @Override
     @Transactional(readOnly = true)
     public UserProfileResponse getUserByEmail(String email) {
@@ -163,6 +207,13 @@ public class AuthServiceImpl implements AuthService {
         return resp;
     }
 
+    /**
+     * Updates user profile information.
+     *
+     * @param userId The ID of the user.
+     * @param request Updated profile fields.
+     * @return UserProfileResponse with updated details.
+     */
     @Override
     @Transactional
     public UserProfileResponse updateProfile(Long userId, UpdateProfileRequest request) {
@@ -182,6 +233,12 @@ public class AuthServiceImpl implements AuthService {
         return resp;
     }
 
+    /**
+     * Changes a user's password after validating the current password.
+     *
+     * @param userId The ID of the user.
+     * @param request Current and new passwords.
+     */
     @Override
     @Transactional
     public void changePassword(Long userId, ChangePasswordRequest request) {
@@ -194,6 +251,11 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.revokeAllUserTokens(user);
     }
 
+    /**
+     * Deactivates a user account.
+     *
+     * @param userId The ID of the user to deactivate.
+     */
     @Override
     @Transactional
     public void deactivateAccount(Long userId) {
@@ -204,11 +266,21 @@ public class AuthServiceImpl implements AuthService {
         publishAuthEvent(AuthEvent.EventType.USER_DEACTIVATED, user);
     }
 
+    /**
+     * Retrieves a list of all user IDs in the system.
+     *
+     * @return List of user IDs.
+     */
     @Override
     public List<Long> getAllUserIds() {
         return userRepository.findAll().stream().map(User::getUserId).toList();
     }
 
+    /**
+     * Initiates the password reset process by generating and emailing an OTP.
+     *
+     * @param email The user's email address.
+     */
     @Override
     @Transactional
     public void forgotPassword(String email) {
@@ -228,6 +300,12 @@ public class AuthServiceImpl implements AuthService {
         emailService.sendOtpEmail(user.getEmail(), otp);
     }
 
+    /**
+     * Verifies if the provided OTP is valid and hasn't expired.
+     *
+     * @param email The user's email address.
+     * @param otp The One-Time Password to verify.
+     */
     @Override
     public void verifyOtp(String email, String otp) {
         User user = userRepository.findByEmail(normalizeEmail(email))
@@ -241,6 +319,13 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    /**
+     * Resets the user's password after OTP verification.
+     *
+     * @param email User's email.
+     * @param otp Verified OTP.
+     * @param newPassword The new password to set.
+     */
     @Override
     @Transactional
     public void resetPassword(String email, String otp, String newPassword) {
@@ -254,6 +339,13 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.revokeAllUserTokens(user);
     }
 
+    /**
+     * Upgrades a user's subscription plan.
+     *
+     * @param userId The ID of the user.
+     * @param planType The new plan type (TRIAL, PRO).
+     * @param durationMonths The duration of the upgrade in months.
+     */
     @Override
     @Transactional
     public void upgradeUserPlan(Long userId, String planType, Integer durationMonths) {
@@ -279,6 +371,11 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
+    /**
+     * Promotes a user to the ADMIN role.
+     *
+     * @param email The email of the user to promote.
+     */
     @Override
     @Transactional
     public void promoteToAdmin(String email) {
@@ -346,6 +443,12 @@ public class AuthServiceImpl implements AuthService {
     private String normalizeEmail(String email) { return email != null ? email.trim().toLowerCase() : null; }
     private String normalizeFullName(String name) { return name != null ? name.trim().replaceAll("\\s+", " ") : null; }
 
+    /**
+     * Updates the default currency for a user.
+     *
+     * @param userId The ID of the user.
+     * @param currency The new currency code (e.g., USD, INR).
+     */
     @Override
     @Transactional
     public void updateCurrency(Long userId, String currency) {

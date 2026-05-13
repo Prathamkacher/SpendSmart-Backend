@@ -7,6 +7,10 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object for creating a new budget.
+ * Contains constraints and thresholds for spending limits.
+ */
 @Data
 @Builder
 @NoArgsConstructor

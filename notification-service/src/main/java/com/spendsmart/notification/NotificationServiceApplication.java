@@ -5,6 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+/**
+ * Entry point for the Notification Service.
+ * Manages user notifications, email alerts, and real-time messaging for the SpendSmart platform.
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients

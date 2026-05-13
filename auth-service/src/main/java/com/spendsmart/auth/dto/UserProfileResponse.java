@@ -7,6 +7,9 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Data Transfer Object for detailed user profile information.
+ */
 @Data
 @Builder
 @NoArgsConstructor

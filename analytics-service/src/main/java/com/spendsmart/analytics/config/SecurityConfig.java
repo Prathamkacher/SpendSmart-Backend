@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Security configuration for the Analytics Service.
+ * Configures stateless JWT-based authentication for analytical endpoints.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

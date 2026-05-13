@@ -27,6 +27,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Handler for successful OAuth2 authentication.
+ * Manages user creation/lookup, JWT token generation, and redirection to the frontend.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

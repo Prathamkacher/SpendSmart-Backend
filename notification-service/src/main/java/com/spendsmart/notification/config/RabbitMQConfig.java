@@ -8,7 +8,10 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// Configuration for RabbitMQ in Notification Service
+/**
+ * Configuration for RabbitMQ in the Notification service.
+ * Defines the exchange, queue, and binding for processing incoming notification events.
+ */
 @Configuration
 public class RabbitMQConfig {
 

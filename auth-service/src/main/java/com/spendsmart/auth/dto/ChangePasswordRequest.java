@@ -4,6 +4,10 @@ package com.spendsmart.auth.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+/**
+ * Data Transfer Object for password change requests.
+ * Includes validation for the new password complexity.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

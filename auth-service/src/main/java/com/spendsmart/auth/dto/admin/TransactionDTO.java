@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Data Transfer Object for transactions viewed from the admin dashboard.
+ * Aggregates core transaction data for platform monitoring.
+ */
 @Data
 @Builder
 @AllArgsConstructor

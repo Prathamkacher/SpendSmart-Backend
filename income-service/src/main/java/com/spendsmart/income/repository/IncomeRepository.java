@@ -14,6 +14,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link Income} entities.
+ * Supports paginated lookups and aggregation of user earnings.
+ */
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 

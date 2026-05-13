@@ -28,6 +28,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
+/**
+ * REST controller for expense management.
+ * Provides endpoints for recording, searching, and aggregating expense data.
+ */
 @Slf4j
 @RestController
 @RequestMapping("/expenses")

@@ -8,6 +8,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * Standardized API response wrapper used across all microservices.
+ * Ensures a consistent JSON structure for both successful data and error messages.
+ * @param <T> The type of data being returned in the response.
+ */
 @Data
 @Builder
 @NoArgsConstructor

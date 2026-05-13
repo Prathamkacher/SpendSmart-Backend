@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for notification management.
+ * Provides endpoints for sending alerts, managing message status, and retrieving user notifications.
+ */
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor

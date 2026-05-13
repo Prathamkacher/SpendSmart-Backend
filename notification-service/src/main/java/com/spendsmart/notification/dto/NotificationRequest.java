@@ -8,6 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for creating a new notification.
+ * Includes recipient identification, alert content, and severity classification.
+ */
 @Data
 @Builder
 @NoArgsConstructor

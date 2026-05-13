@@ -8,6 +8,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object for creating or updating an income record.
+ * Contains validation constraints for income attributes.
+ */
 @Data
 public class IncomeRequest {
 

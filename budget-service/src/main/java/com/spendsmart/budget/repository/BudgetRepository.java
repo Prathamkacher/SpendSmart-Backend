@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository for managing {@link Budget} entities.
+ * Supports active budget lookups and atomic spending updates.
+ */
 @Repository
 public interface BudgetRepository extends JpaRepository<Budget, Long> {
 

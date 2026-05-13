@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Data Transfer Object for budget information within the analytics context.
+ * Summarizes budget limits and current spending.
+ */
 @Data
 @Builder
 @NoArgsConstructor

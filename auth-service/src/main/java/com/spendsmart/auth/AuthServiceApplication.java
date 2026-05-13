@@ -7,6 +7,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * Entry point for the Authentication Service.
+ * Provides user management, security tokens, and administrative controls.
+ */
 @SpringBootApplication
 @EnableScheduling
 @EnableFeignClients

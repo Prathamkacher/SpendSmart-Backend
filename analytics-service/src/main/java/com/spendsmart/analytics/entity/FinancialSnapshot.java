@@ -5,6 +5,10 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a historical financial snapshot for a user.
+ * Stores aggregated financial metrics for a specific period (e.g., month/year).
+ */
 @Entity
 @Table(name = "financial_snapshots")
 @Getter

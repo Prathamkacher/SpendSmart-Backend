@@ -6,6 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * Entry point for the Analytics Service.
+ * Provides data processing and visualization logic for financial insights.
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients

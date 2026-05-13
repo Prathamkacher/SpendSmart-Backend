@@ -6,6 +6,10 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Data Transfer Object representing a category response.
+ * Includes all relevant fields for displaying a category.
+ */
 @Data
 @Builder
 @NoArgsConstructor

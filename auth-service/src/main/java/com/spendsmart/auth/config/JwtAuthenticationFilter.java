@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+/**
+ * Filter that intercepts HTTP requests to validate JWT tokens in the Authorization header.
+ * Extends {@link AbstractJwtAuthenticationFilter} for standardized token processing.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

@@ -21,6 +21,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Implementation of the {@link BudgetService}.
+ * Handles persistent storage of budgets, atomic spending updates, and threshold monitoring.
+ * Dispatches notification events when budget thresholds are breached.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

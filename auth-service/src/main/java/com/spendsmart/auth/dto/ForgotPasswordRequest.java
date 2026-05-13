@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
+/**
+ * Data Transfer Object for requesting a password reset.
+ */
 @Data
 public class ForgotPasswordRequest {
     @NotBlank(message = "Email is required")

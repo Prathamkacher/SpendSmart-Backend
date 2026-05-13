@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing an income record.
+ * Tracks user earnings from various sources like salary, investments, or business.
+ */
 @Entity
 @Table(name = "incomes")
 @Data

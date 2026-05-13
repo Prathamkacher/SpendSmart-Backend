@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing an expense transaction.
+ * Stores details about the user, category, amount, payment method, and metadata.
+ */
 @Entity
 @Table(name = "expenses")
 @Data

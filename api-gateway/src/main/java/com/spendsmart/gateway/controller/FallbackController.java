@@ -8,6 +8,10 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Fallback controller for the API Gateway.
+ * Provides default responses when downstream microservices are unreachable or time out.
+ */
 @RestController
 @RequestMapping("/fallback")
 public class FallbackController {

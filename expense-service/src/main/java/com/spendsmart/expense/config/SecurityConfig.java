@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Security configuration for the Expense Service.
+ * Configures stateless JWT-based authentication for expense management endpoints.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

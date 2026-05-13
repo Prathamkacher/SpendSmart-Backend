@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.Map;
 
+/**
+ * Feign client for communicating with the Expense service.
+ * Used to fetch expense data for spending analysis and trends.
+ */
 @FeignClient(name = "expense-service", path = "/api")
 public interface ExpenseServiceClient {
 

@@ -9,6 +9,10 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for RabbitMQ messaging.
+ * Defines exchanges, queues, and bindings for authentication-related events.
+ */
 @Configuration
 public class RabbitMQConfig {
 

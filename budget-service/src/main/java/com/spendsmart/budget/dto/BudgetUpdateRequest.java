@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object for updating an existing budget's spending amount.
+ * Typically used to increment or set the 'spent' total.
+ */
 @Data
 @Builder
 @NoArgsConstructor

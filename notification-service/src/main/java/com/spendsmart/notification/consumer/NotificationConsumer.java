@@ -10,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * Message consumer that listens for notification events on RabbitMQ.
+ * Transforms shared events into service-specific requests and triggers dispatch.
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor

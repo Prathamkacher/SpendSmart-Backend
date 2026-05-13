@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Scheduler for automated analytical tasks.
+ * Periodically triggers data aggregation and snapshot generation for all users.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j

@@ -16,6 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration for the Authentication Service.
+ * Configures HTTP security, OAuth2 login, JWT filters, and password encoding.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

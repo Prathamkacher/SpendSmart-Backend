@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a financial budget for a user.
+ * Tracks spending limits against specific categories over a defined period.
+ */
 @Entity
 @Table(name = "budgets")
 @Data

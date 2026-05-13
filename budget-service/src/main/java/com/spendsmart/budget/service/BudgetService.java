@@ -6,6 +6,10 @@ import com.spendsmart.budget.dto.BudgetUpdateRequest;
 
 import java.util.List;
 
+/**
+ * Service interface for budget management.
+ * Defines core operations for budget lifecycles and cross-service spending synchronization.
+ */
 public interface BudgetService {
     BudgetResponse createBudget(Long userId, BudgetRequest request);
     BudgetResponse getBudgetById(Long userId, Long budgetId);

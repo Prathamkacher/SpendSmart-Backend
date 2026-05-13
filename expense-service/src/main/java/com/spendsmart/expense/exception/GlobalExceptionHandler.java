@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Central exception handler for the Expense service.
+ * Handles domain-specific expense exceptions and integrates with {@link BaseGlobalExceptionHandler}.
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler extends BaseGlobalExceptionHandler {

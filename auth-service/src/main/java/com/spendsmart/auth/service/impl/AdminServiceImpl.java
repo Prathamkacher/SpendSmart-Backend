@@ -29,6 +29,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service implementation for administrative operations.
+ * Handles user management (suspend, activate, delete), platform analytics,
+ * global notifications, and reporting.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,6 +46,11 @@ public class AdminServiceImpl implements AdminService {
     private final RabbitTemplate rabbitTemplate;
     private final EmailService emailService;
 
+    /**
+     * Retrieves all users registered in the system.
+     *
+     * @return List of UserProfileResponse objects.
+     */
     @Override
     public List<UserProfileResponse> getAllUsers() {
         log.info("Admin: Fetching all users");
@@ -55,6 +65,12 @@ public class AdminServiceImpl implements AdminService {
                 .toList();
     }
 
+    /**
+     * Suspends a user account, preventing them from logging in.
+     *
+     * @param userId The ID of the user to suspend.
+     * @throws RuntimeException if attempting to suspend the super-admin.
+     */
     @Override
     @Transactional
     public void suspendUser(Long userId) {
@@ -70,6 +86,11 @@ public class AdminServiceImpl implements AdminService {
         emailService.sendAccountSuspendedEmail(user.getEmail(), user.getFullName());
     }
 
+    /**
+     * Activates a previously suspended user account.
+     *
+     * @param userId The ID of the user to activate.
+     */
     @Override
     @Transactional
     public void activateUser(Long userId) {
@@ -82,6 +103,12 @@ public class AdminServiceImpl implements AdminService {
         emailService.sendAccountActivatedEmail(user.getEmail(), user.getFullName());
     }
 
+    /**
+     * Permanently deletes a user account.
+     *
+     * @param userId The ID of the user to delete.
+     * @throws RuntimeException if attempting to delete the super-admin.
+     */
     @Override
     @Transactional
     public void deleteUser(Long userId) {
@@ -99,6 +126,11 @@ public class AdminServiceImpl implements AdminService {
         emailService.sendAccountDeletedEmail(email, fullName);
     }
 
+    /**
+     * Aggregates transactions from both Expense and Income services for platform-wide monitoring.
+     *
+     * @return List of TransactionDTOs ordered by date descending.
+     */
     @Override
     public List<TransactionDTO> getAllTransactions() {
         log.info("Admin: Fetching all platform transactions");
@@ -128,6 +160,11 @@ public class AdminServiceImpl implements AdminService {
         return transactions;
     }
 
+    /**
+     * Calculates platform-wide analytics including user counts, total volume, and trends.
+     *
+     * @return PlatformAnalytics summary.
+     */
     @Override
     public PlatformAnalytics getPlatformAnalytics() {
         log.info("Admin: Calculating platform analytics");
@@ -166,6 +203,12 @@ public class AdminServiceImpl implements AdminService {
                 .build();
     }
 
+    /**
+     * Identifies the highest spending users on the platform.
+     * Currently implemented as a placeholder.
+     *
+     * @return List of TopUserDTOs.
+     */
     @Override
     public List<TopUserDTO> getTopSpendingUsers() {
         // Simple implementation: list all users and their total expenses
@@ -175,6 +218,13 @@ public class AdminServiceImpl implements AdminService {
         return List.of();
     }
 
+    /**
+     * Sends a system-wide notification to all users via RabbitMQ.
+     *
+     * @param title Notification title.
+     * @param message Notification message body.
+     * @param severity Level of severity (INFO, WARNING, etc.).
+     */
     @Override
     public void sendGlobalNotification(String title, String message, String severity) {
         log.info("Admin: Sending global notification: {}", title);
@@ -190,6 +240,11 @@ public class AdminServiceImpl implements AdminService {
         rabbitTemplate.convertAndSend(AppConstants.NOTIFICATION_EXCHANGE, AppConstants.NOTIFICATION_ROUTING_KEY, event);
     }
 
+    /**
+     * Generates a platform report in JSON format.
+     *
+     * @return Byte array of the report content.
+     */
     @Override
     public byte[] exportPlatformReport() {
         log.info("Admin: Exporting platform report");
@@ -205,6 +260,13 @@ public class AdminServiceImpl implements AdminService {
         return report.toString().getBytes();
     }
 
+    /**
+     * Updates the authorization role of a user.
+     *
+     * @param userId The ID of the user.
+     * @param role The new role name (ADMIN, USER).
+     * @throws RuntimeException if role is invalid or user is super-admin.
+     */
     @Override
     @Transactional
     public void updateUserRole(Long userId, String role) {

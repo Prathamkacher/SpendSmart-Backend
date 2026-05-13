@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Primary;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Configuration for the API Gateway's Swagger UI.
+ * Aggregates OpenAPI documentation from downstream microservices.
+ */
 @Configuration
 public class SwaggerConfig {
 

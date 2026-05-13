@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * Filter that intercepts HTTP requests to validate JWT tokens.
+ * Extends {@link AbstractJwtAuthenticationFilter} for standardized token processing in analytics service.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

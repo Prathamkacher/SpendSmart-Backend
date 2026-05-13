@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object for expense forecasting.
+ * Provides predicted future spending based on historical data.
+ */
 @Data
 @Builder
 @NoArgsConstructor

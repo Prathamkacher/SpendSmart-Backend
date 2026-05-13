@@ -22,6 +22,11 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@link AnalyticsService}.
+ * Orchestrates data retrieval from multiple microservices and performs complex financial calculations.
+ * Publishes notification events for monthly summaries.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

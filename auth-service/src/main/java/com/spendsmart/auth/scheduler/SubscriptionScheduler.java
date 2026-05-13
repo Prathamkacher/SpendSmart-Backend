@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+/**
+ * Scheduled task for managing user subscriptions.
+ * Checks for plan expirations and sends notifications or downgrades plans automatically.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

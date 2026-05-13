@@ -1,5 +1,9 @@
 package com.spendsmart.category.constants;
 
+/**
+ * Constant values used throughout the Category service.
+ * Includes success/error messages, security constants, and Swagger tags.
+ */
 public final class AppConstants {
 
     private AppConstants() {}

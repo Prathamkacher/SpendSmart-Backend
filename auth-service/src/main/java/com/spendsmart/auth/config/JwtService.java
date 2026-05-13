@@ -14,6 +14,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service for managing JSON Web Tokens.
+ * Handles generation, extraction of custom claims, and validation.
+ */
 @Slf4j
 @Component
 public class JwtService extends AbstractJwtService {
@@ -24,6 +28,15 @@ public class JwtService extends AbstractJwtService {
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
 
+    /**
+     * Generates a new JWT for a user with specific claims.
+     *
+     * @param email The user's email (subject).
+     * @param userId The unique user ID.
+     * @param role The user's role (e.g., ADMIN, USER).
+     * @param planType The user's subscription plan.
+     * @return A signed JWT string.
+     */
     public String generateToken(String email, Long userId, String role, String planType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);

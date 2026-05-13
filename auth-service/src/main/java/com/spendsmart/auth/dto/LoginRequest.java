@@ -4,6 +4,9 @@ package com.spendsmart.auth.dto;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+/**
+ * Data Transfer Object for user login credentials.
+ */
 @Data
 @Builder
 @NoArgsConstructor

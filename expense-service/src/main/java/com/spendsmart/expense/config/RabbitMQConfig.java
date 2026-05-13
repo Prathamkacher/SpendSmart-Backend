@@ -5,6 +5,10 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration for RabbitMQ in the Expense service.
+ * Sets up queues and message converters for asynchronous communication.
+ */
 @Configuration
 public class RabbitMQConfig {
 

@@ -7,6 +7,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a refresh token for a user.
+ * Used to generate new access tokens without requiring re-authentication.
+ */
 @Entity
 @Table(name = "refresh_tokens")
 @Data

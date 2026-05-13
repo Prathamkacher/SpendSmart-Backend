@@ -4,6 +4,10 @@ import com.spendsmart.shared.security.AbstractJwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for extracting claims from JSON Web Tokens.
+ * Extends {@link AbstractJwtService} to provide secret key management for the expense service.
+ */
 @Service
 public class JwtService extends AbstractJwtService {
 

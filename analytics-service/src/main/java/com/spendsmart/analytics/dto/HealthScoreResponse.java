@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for financial health scores.
+ * Evaluates a user's financial status based on savings and budget adherence.
+ */
 @Data
 @Builder
 @NoArgsConstructor

@@ -8,6 +8,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Data Transfer Object for income information.
+ * Returns detailed record of a user's income transaction.
+ */
 @Data
 public class IncomeResponse {
     private Long incomeId;

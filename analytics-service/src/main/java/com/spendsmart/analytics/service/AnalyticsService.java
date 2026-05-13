@@ -4,6 +4,10 @@ import com.spendsmart.analytics.dto.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Service interface for financial analytics.
+ * Defines methods for aggregating transaction data, calculating trends, and generating forecasts.
+ */
 public interface AnalyticsService {
     void generateMonthlySnapshot(Long userId, int year, int month);
     MonthlySummary getMonthlySummary(Long userId, int year, int month);

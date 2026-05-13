@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object for monthly financial summaries.
+ * Aggregates income, expenses, and savings metrics for a specific month.
+ */
 @Data
 @Builder
 @NoArgsConstructor
