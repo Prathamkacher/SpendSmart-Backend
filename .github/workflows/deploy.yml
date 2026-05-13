@@ -29,6 +29,7 @@ jobs:
           # Run tests and sonar scan on the root project
           mvn -B verify sonar:sonar \
             -Dsonar.projectKey=spendsmart-backend \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -DskipTests=false
