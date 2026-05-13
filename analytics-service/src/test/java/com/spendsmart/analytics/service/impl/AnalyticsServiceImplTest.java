@@ -3,6 +3,7 @@ package com.spendsmart.analytics.service.impl;
 import com.spendsmart.analytics.client.BudgetServiceClient;
 import com.spendsmart.analytics.client.ExpenseServiceClient;
 import com.spendsmart.analytics.client.IncomeServiceClient;
+import com.spendsmart.analytics.dto.BudgetDto;
 import com.spendsmart.analytics.dto.ForecastResponse;
 import com.spendsmart.analytics.dto.HealthScoreResponse;
 import com.spendsmart.analytics.dto.MonthlySummary;
