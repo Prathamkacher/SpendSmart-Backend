@@ -109,29 +109,26 @@ class AnalyticsServiceImplTest {
         setupHealthMocks(10000, 2000, 8000);
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("EXCELLENT");
-        assertThat(response.getScore()).isGreaterThanOrEqualTo(80);
+        assertThat(response.getScore()).isGreaterThanOrEqualTo(80.0);
     }
 
     @Test
     @DisplayName("getFinancialHealthScore() - good tier verification")
-    void getFinancialHealthScore_Good() {
-        setupHealthMocks(5000, 2000, 3000); 
+        setupHealthMocks(5000, 2000, 3000, 1500); // 50% adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("GOOD");
     }
 
     @Test
     @DisplayName("getFinancialHealthScore() - average tier verification")
-    void getFinancialHealthScore_Average() {
-        setupHealthMocks(5000, 3000, 3500); 
+        setupHealthMocks(5000, 3000, 3500, 2800); // 20% adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("AVERAGE");
     }
 
     @Test
     @DisplayName("getFinancialHealthScore() - poor tier verification")
-    void getFinancialHealthScore_Poor() {
-        setupHealthMocks(5000, 4800, 4000);
+        setupHealthMocks(5000, 4800, 4000, 3800); // Low adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("POOR");
     }
@@ -306,16 +303,24 @@ class AnalyticsServiceImplTest {
         assertThat(response.getConfidence()).isEqualTo("HIGH");
     }
 
-    private void setupHealthMocks(double income, double expense, double budget) {
-
-
+    private void setupHealthMocks(double income, double expense, double budgetLimit, double budgetSpent) {
         when(incomeServiceClient.getTotalIncomeByMonth(anyInt(), anyInt()))
                 .thenReturn(ApiResponse.success("ok", BigDecimal.valueOf(income)));
         when(expenseServiceClient.getTotalExpensesByMonth(anyInt(), anyInt()))
                 .thenReturn(ApiResponse.success("ok", BigDecimal.valueOf(expense)));
-        when(budgetServiceClient.getTotalBudgetByMonth(anyInt(), anyInt()))
-                .thenReturn(ApiResponse.success("ok", BigDecimal.valueOf(budget)));
+        
+        BudgetDto budget = BudgetDto.builder()
+                .limitAmount(BigDecimal.valueOf(budgetLimit))
+                .spentAmount(BigDecimal.valueOf(budgetSpent))
+                .build();
+        when(budgetServiceClient.getActiveBudgets())
+                .thenReturn(ApiResponse.success("ok", Collections.singletonList(budget)));
     }
+
+    private void setupHealthMocks(double income, double expense, double budgetLimit) {
+        setupHealthMocks(income, expense, budgetLimit, 0);
+    }
+
     @Test
     @DisplayName("getSpendingForecast() - momentum decrease logic")
     void getSpendingForecast_MomentumDecrease() {
