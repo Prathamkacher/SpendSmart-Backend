@@ -85,7 +85,6 @@ class BaseGlobalExceptionHandlerTest {
     void exceptionClassesShouldExposeTheirMessages() {
         assertThat(new ResourceNotFoundException("missing").getMessage()).isEqualTo("missing");
         assertThat(new UnauthorizedAccessException("denied").getMessage()).isEqualTo("denied");
-        assertThat(new GlobalExceptionHandler()).isNotNull();
     }
 
     private static class TestExceptionHandler extends BaseGlobalExceptionHandler {
