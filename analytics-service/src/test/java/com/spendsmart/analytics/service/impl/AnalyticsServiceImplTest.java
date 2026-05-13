@@ -114,6 +114,7 @@ class AnalyticsServiceImplTest {
 
     @Test
     @DisplayName("getFinancialHealthScore() - good tier verification")
+    void getFinancialHealthScore_Good() {
         setupHealthMocks(5000, 2000, 3000, 1500); // 50% adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("GOOD");
@@ -121,6 +122,7 @@ class AnalyticsServiceImplTest {
 
     @Test
     @DisplayName("getFinancialHealthScore() - average tier verification")
+    void getFinancialHealthScore_Average() {
         setupHealthMocks(5000, 3000, 3500, 2800); // 20% adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("AVERAGE");
@@ -128,6 +130,7 @@ class AnalyticsServiceImplTest {
 
     @Test
     @DisplayName("getFinancialHealthScore() - poor tier verification")
+    void getFinancialHealthScore_Poor() {
         setupHealthMocks(5000, 4800, 4000, 3800); // Low adherence
         HealthScoreResponse response = analyticsService.getFinancialHealthScore(userId, year, month);
         assertThat(response.getStatus()).isEqualTo("POOR");
