@@ -1,14 +1,20 @@
-# Stage 1: Build
+# api-gateway/Dockerfile
 FROM maven:3.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-COPY src ./src
-RUN mvn clean package -DskipTests -B
 
-# Stage 2: Run
+# 1. Install spendsmart-common
+COPY spendsmart-common spendsmart-common
+RUN cd spendsmart-common && mvn install -DskipTests -B --no-transfer-progress
+
+# 2. Build api-gateway
+COPY api-gateway api-gateway
+RUN cd api-gateway && mvn package -DskipTests -B --no-transfer-progress
+
+# ── Stage 2: Run ───────────────────────────────────────────────────
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+RUN addgroup -S spring && adduser -S spring -G spring && apk add --no-cache curl
+USER spring:spring
+COPY --from=build /app/api-gateway/target/api-gateway-1.0.0.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

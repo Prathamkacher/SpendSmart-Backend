@@ -2,15 +2,15 @@ version: "3.9"
 
 services:
 
-  # ── MySQL ────────────────────────────────────────────────────────
   mysql:
     image: mysql:8.0
     container_name: spendsmart-mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -21,52 +21,36 @@ services:
       timeout: 5s
       retries: 5
 
-  # ── Redis ────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     container_name: spendsmart-redis
-    ports:
-      - "6379:6379"
+    restart: always
     networks:
       - spendsmart-network
 
-  # ── RabbitMQ ─────────────────────────────────────────────────────
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: spendsmart-rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    restart: always
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
     networks:
       - spendsmart-network
 
-  # ── Eureka Server ────────────────────────────────────────────────
   eureka-server:
-    build:
-      context: .
-      dockerfile: eureka-server/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-eureka:latest
     container_name: spendsmart-eureka
+    restart: always
     ports:
       - "8761:8761"
     networks:
       - spendsmart-network
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
-  # ── Auth Service ─────────────────────────────────────────────────
   auth-service:
-    build:
-      context: .
-      dockerfile: auth-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-auth:latest
     container_name: spendsmart-auth
-    ports:
-      - "8081:8081"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -86,19 +70,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Expense Service ─────────────────────────────────────────────
   expense-service:
-    build:
-      context: .
-      dockerfile: expense-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-expense:latest
     container_name: spendsmart-expense
-    ports:
-      - "8083:8083"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -108,52 +86,34 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── API Gateway ────────────────────────────────────────────────
   api-gateway:
-    build:
-      context: .
-      dockerfile: api-gateway/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-gateway:latest
     container_name: spendsmart-gateway
+    restart: always
     ports:
       - "8080:8080"
     environment:
       EUREKA_SERVER: http://eureka-server:8761/eureka/
-    depends_on:
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Admin Server ─────────────────────────────────────────────────
   admin-server:
-    build:
-      context: .
-      dockerfile: admin-server/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-admin:latest
     container_name: spendsmart-admin
-    ports:
-      - "8082:8082"
+    restart: always
     environment:
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
-    depends_on:
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Income Service ──────────────────────────────────────────────
   income-service:
-    build:
-      context: .
-      dockerfile: income-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-income:latest
     container_name: spendsmart-income
-    ports:
-      - "8084:8084"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -163,19 +123,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Category Service ───────────────────────────────────────────
   category-service:
-    build:
-      context: .
-      dockerfile: category-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-category:latest
     container_name: spendsmart-category
-    ports:
-      - "8085:8085"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -185,19 +139,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Budget Service ─────────────────────────────────────────────
   budget-service:
-    build:
-      context: .
-      dockerfile: budget-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-budget:latest
     container_name: spendsmart-budget
-    ports:
-      - "8086:8086"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -207,19 +155,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Analytics Service ──────────────────────────────────────────
   analytics-service:
-    build:
-      context: .
-      dockerfile: analytics-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-analytics:latest
     container_name: spendsmart-analytics
-    ports:
-      - "8087:8087"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -229,19 +171,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Recurring Transaction Service ──────────────────────────────
   recurring-transaction-service:
-    build:
-      context: .
-      dockerfile: recurring-transaction-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-recurring:latest
     container_name: spendsmart-recurring
-    ports:
-      - "8088:8088"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -251,19 +187,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Notification Service ──────────────────────────────────────────
   notification-service:
-    build:
-      context: .
-      dockerfile: notification-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-notification:latest
     container_name: spendsmart-notification
-    ports:
-      - "8089:8089"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -276,19 +206,13 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Payment Service ─────────────────────────────────────────────
   payment-service:
-    build:
-      context: .
-      dockerfile: payment-service/Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-payment:latest
     container_name: spendsmart-payment
-    ports:
-      - "8091:8091"
+    restart: always
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -300,21 +224,15 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      eureka-server:
-        condition: service_healthy
     networks:
       - spendsmart-network
 
-  # ── Frontend ─────────────────────────────────────────────────────
   frontend:
-    build:
-      context: ../spendsmart-frontend
-      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME}/spendsmart-frontend:latest
     container_name: spendsmart-frontend
+    restart: always
     ports:
       - "80:80"
-    depends_on:
-      - api-gateway
     networks:
       - spendsmart-network
 

@@ -1,0 +1,175 @@
+name: Build and Deploy Backend
+
+on:
+  push:
+    branches: [ "main", "dev", "feature/**" ]
+  workflow_dispatch:
+
+jobs:
+  test-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Tests and Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          # Run tests and sonar scan on the root project
+          mvn -B verify sonar:sonar \
+            -Dsonar.projectKey=spendsmart-backend \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -DskipTests=false
+
+  build-and-push:
+    needs: test-and-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: actions/setup-docker-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Eureka Server
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: eureka-server/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-eureka:latest
+
+      - name: Build and Push Admin Server
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: admin-server/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-admin:latest
+
+      - name: Build and Push Auth Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: auth-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-auth:latest
+
+      - name: Build and Push API Gateway
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: api-gateway/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-gateway:latest
+
+      - name: Build and Push Expense Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: expense-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-expense:latest
+
+      - name: Build and Push Income Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: income-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-income:latest
+
+      - name: Build and Push Category Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: category-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-category:latest
+
+      - name: Build and Push Budget Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: budget-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-budget:latest
+
+      - name: Build and Push Analytics Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: analytics-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-analytics:latest
+
+      - name: Build and Push Recurring Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: recurring-transaction-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-recurring:latest
+
+      - name: Build and Push Notification Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: notification-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-notification:latest
+
+      - name: Build and Push Payment Service
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: payment-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/spendsmart-payment:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose.prod.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.prod.yml"
+          target: "~/spendsmart"
+
+      - name: Execute Remote SSH Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/spendsmart
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d

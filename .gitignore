@@ -8,6 +8,7 @@
 *.zip
 *.tar.gz
 *.rar
+run-local.bat
 
 ### Environment files ###
 .env
@@ -89,5 +90,3 @@ node_modules/
 npm-debug.log
 
 
-### Bat file
-*.bat
