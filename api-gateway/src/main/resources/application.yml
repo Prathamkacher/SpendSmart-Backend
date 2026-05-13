@@ -31,11 +31,11 @@ spring:
           predicates:
             - Path=/auth/**
           filters:
-            - PrefixPath=/api
-            - name: CircuitBreaker
-              args:
-                name: auth-service
-                fallbackUri: forward:/fallback/auth
+            - RewritePath=/auth/(?<segment>.*), /api/auth/$\{segment}
+            # - name: CircuitBreaker
+            #   args:
+            #     name: auth-service
+            #     fallbackUri: forward:/fallback/auth
 
         # Auth Docs (Aggregated)
         - id: auth-docs
@@ -246,9 +246,12 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER:http://eureka-server:8761/eureka/}
   instance:
     prefer-ip-address: true
+
+rabbitmq:
+  host: ${RABBITMQ_HOST:rabbitmq}
 
 management:
   endpoints:
