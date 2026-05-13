@@ -2,7 +2,7 @@ name: Build and Deploy Backend
 
 on:
   push:
-    branches: [ "main", "dev", "service/**" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -172,5 +172,6 @@ jobs:
           script: |
             cd ~/spendsmart
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             sudo docker-compose --env-file .env -f docker-compose.prod.yml pull
             sudo docker-compose --env-file .env -f docker-compose.prod.yml up -d
