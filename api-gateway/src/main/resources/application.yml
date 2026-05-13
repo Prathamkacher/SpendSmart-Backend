@@ -204,7 +204,8 @@ spring:
             allowedOrigins: 
               - "http://localhost:4200"
               - "http://localhost"
-              - "http://13.48.183.110.nip.io"
+              - "http://13.48.183.110"
+              - "http://13.48.183.110.sslip.io"
             allowedMethods:
               - GET
               - POST
