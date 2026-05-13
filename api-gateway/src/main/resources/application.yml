@@ -19,7 +19,7 @@ spring:
         # Auth Service
         # OAuth2 Login (Specific)
         - id: auth-oauth2
-          uri: http://localhost:8081
+          uri: lb://auth-service
           predicates:
             - Path=/auth/oauth2/**, /auth/login/oauth2/code/**
           filters:
@@ -204,6 +204,7 @@ spring:
             allowedOrigins: 
               - "http://localhost:4200"
               - "http://localhost"
+              - "http://13.48.183.110.nip.io"
             allowedMethods:
               - GET
               - POST
