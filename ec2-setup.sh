@@ -4,12 +4,28 @@
 # Run this once on your fresh EC2 instance
 
 # 1. Update system
-sudo yum update -y
+if command -v apt-get &> /dev/null; then
+    sudo apt-get update -y
+else
+    sudo yum update -y
+fi
 
 # 2. Install Docker
-sudo amazon-linux-extras install docker -y
+if command -v apt-get &> /dev/null; then
+    # Ubuntu/Debian
+    sudo apt-get update
+    sudo apt-get install -y docker.io
+elif command -v dnf &> /dev/null; then
+    # Amazon Linux 2023 / RHEL
+    sudo dnf install docker -y
+else
+    # Amazon Linux 2
+    sudo amazon-linux-extras install docker -y
+fi
+
 sudo service docker start
-sudo usermod -a -G docker ec2-user
+sudo systemctl enable docker || true
+sudo usermod -a -G docker $USER
 
 # 3. Install Docker Compose
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
