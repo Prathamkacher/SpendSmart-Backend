@@ -93,7 +93,7 @@ class AuthServiceImplTest {
         assertThat(response).isNotNull();
         verify(userRepository).save(any());
         verify(emailService).sendWelcomeEmail(any(), any());
-        verify(rabbitTemplate).convertAndSend(any(String.class), any(String.class), any(Object.class));
+        verify(rabbitTemplate, times(2)).convertAndSend(any(String.class), any(String.class), any(Object.class));
     }
 
     @Test
@@ -327,7 +327,7 @@ class AuthServiceImplTest {
         authService.upgradeUserPlan(userId, "PRO", 12);
         
         assertThat(testUser.getPlanType()).isEqualTo(User.PlanType.PRO);
-        verify(emailService).sendPremiumActivationEmail(eq(email), anyString(), eq("PRO"), anyDouble());
+        verify(emailService).sendPremiumActivationEmail(eq(email), anyString(), eq("PRO Yearly"), anyDouble());
     }
 
     @Test
