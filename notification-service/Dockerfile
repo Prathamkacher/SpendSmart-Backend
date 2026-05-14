@@ -17,4 +17,4 @@ RUN addgroup -S spring && adduser -S spring -G spring && apk add --no-cache curl
 USER spring:spring
 COPY --from=build /app/notification-service/target/notification-service-1.0.0.jar app.jar
 EXPOSE 8089
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
