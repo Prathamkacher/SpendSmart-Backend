@@ -1,4 +1,4 @@
--- V8: Promote existing user to ADMIN instead of recreating
+-- V6: Promote existing user to ADMIN instead of recreating
 -- This ensures that if the user logged in via Google, they keep their account settings
 UPDATE users 
 SET role = 'ADMIN' 
