@@ -250,8 +250,9 @@ eureka:
   instance:
     prefer-ip-address: true
 
-rabbitmq:
-  host: ${RABBITMQ_HOST:rabbitmq}
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
 
 management:
   endpoints:
