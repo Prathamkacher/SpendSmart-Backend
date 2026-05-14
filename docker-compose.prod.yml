@@ -15,7 +15,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - spendsmart-network
-    mem_limit: 800m
+    mem_limit: 768m
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
@@ -34,7 +34,7 @@ services:
     image: rabbitmq:3-management-alpine
     container_name: spendsmart-rabbitmq
     restart: always
-    mem_limit: 400m
+    mem_limit: 512m
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
@@ -105,9 +105,9 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    mem_limit: 512m
+    mem_limit: 640m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms256m -Xmx448m"
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
     networks:
