@@ -15,7 +15,6 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - spendsmart-network
-    mem_limit: 768m
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
@@ -26,7 +25,6 @@ services:
     image: redis:7-alpine
     container_name: spendsmart-redis
     restart: always
-    mem_limit: 128m
     networks:
       - spendsmart-network
 
@@ -34,7 +32,6 @@ services:
     image: rabbitmq:3-management-alpine
     container_name: spendsmart-rabbitmq
     restart: always
-    mem_limit: 512m
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
