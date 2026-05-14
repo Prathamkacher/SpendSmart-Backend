@@ -90,6 +90,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${EXPENSE_DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -121,6 +122,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx384m"
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      RABBITMQ_HOST: rabbitmq
     networks:
       - spendsmart-network
 
@@ -136,6 +138,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_income?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -154,6 +157,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${CATEGORY_DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -172,6 +176,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${BUDGET_DB_DATABASE}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -190,6 +195,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_analytics?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -208,6 +214,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
     depends_on:
       mysql:
         condition: service_healthy
@@ -247,6 +254,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
+      RABBITMQ_HOST: rabbitmq
       RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
       RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
     depends_on:
