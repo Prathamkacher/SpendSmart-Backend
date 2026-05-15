@@ -31,9 +31,7 @@ import static org.mockito.Mockito.*;
 class NotificationServiceImplTest {
 
     @Mock private NotificationRepository notificationRepository;
-    @Mock private JavaMailSender mailSender;
-    @Mock private AuthClient authClient;
-    @Mock private MimeMessage mimeMessage;
+    @Mock private EmailService emailService;
 
     @InjectMocks
     private NotificationServiceImpl notificationService;
@@ -74,21 +72,29 @@ class NotificationServiceImplTest {
     }
 
     @Test
-    @DisplayName("send() - should send email for CRITICAL severity")
+    @DisplayName("send() - should trigger EmailService for CRITICAL severity")
     void send_Critical_ShouldSendEmail() {
         testNotification.setSeverity(Notification.Severity.CRITICAL);
         notificationRequest.setSeverity(Notification.Severity.CRITICAL);
         
-        UserProfileResponse userProfile = new UserProfileResponse();
-        userProfile.setEmail("test@example.com");
-
         when(notificationRepository.save(any())).thenReturn(testNotification);
-        when(authClient.getUserById(USER_ID)).thenReturn(userProfile);
-        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
         notificationService.send(notificationRequest);
 
-        verify(mailSender).send(any(MimeMessage.class));
+        verify(emailService).sendCriticalAlertEmail(any(Notification.class));
+    }
+
+    @Test
+    @DisplayName("send() - should trigger EmailService for PAYMENT_RECEIPT type")
+    void send_PaymentReceipt_ShouldSendEmail() {
+        testNotification.setType(Notification.NotificationType.PAYMENT_RECEIPT);
+        notificationRequest.setType(Notification.NotificationType.PAYMENT_RECEIPT);
+        
+        when(notificationRepository.save(any())).thenReturn(testNotification);
+
+        notificationService.send(notificationRequest);
+
+        verify(emailService).sendReceiptEmail(any(Notification.class));
     }
 
     @Test
@@ -112,22 +118,6 @@ class NotificationServiceImplTest {
         notificationService.sendBulk(userIds, "System Update", "Down for maintenance");
 
         verify(notificationRepository).saveAll(anyList());
-    }
-
-    @Test
-    @DisplayName("sendEmail() - should handle auth service failure gracefully")
-    void send_Critical_AuthFailure_ShouldNotThrowException() {
-        testNotification.setSeverity(Notification.Severity.CRITICAL);
-        notificationRequest.setSeverity(Notification.Severity.CRITICAL);
-        
-        when(notificationRepository.save(any())).thenReturn(testNotification);
-        when(authClient.getUserById(USER_ID)).thenThrow(new RuntimeException("Auth service down"));
-
-        // Should not throw exception, just log and continue
-        NotificationDTO result = notificationService.send(notificationRequest);
-        
-        assertThat(result).isNotNull();
-        verify(mailSender, never()).send(any(MimeMessage.class));
     }
 
     @Test
@@ -205,6 +195,7 @@ class NotificationServiceImplTest {
 
         assertThat(results).hasSize(1);
     }
+
     @Test
     @DisplayName("markAsRead() - should throw exception if not found")
     void markAsRead_NotFound_ShouldThrowException() {
@@ -222,21 +213,5 @@ class NotificationServiceImplTest {
         assertThatThrownBy(() -> notificationService.acknowledge(99L))
                 .isInstanceOf(RuntimeException.class);
     }
-
-    @Test
-    @DisplayName("sendEmail() - should handle null user email profile")
-    void sendEmail_NullEmail_ShouldLogWarning() {
-        testNotification.setSeverity(Notification.Severity.CRITICAL);
-        notificationRequest.setSeverity(Notification.Severity.CRITICAL);
-        
-        UserProfileResponse userProfile = new UserProfileResponse();
-        userProfile.setEmail(null);
-
-        when(notificationRepository.save(any())).thenReturn(testNotification);
-        when(authClient.getUserById(USER_ID)).thenReturn(userProfile);
-
-        notificationService.send(notificationRequest);
-
-        verify(mailSender, never()).createMimeMessage();
-    }
+}
 }

@@ -30,10 +30,7 @@ public class NotificationServiceTest {
     private NotificationRepository notificationRepository;
 
     @Mock
-    private JavaMailSender mailSender;
-
-    @Mock
-    private AuthClient authClient;
+    private EmailService emailService;
 
     @InjectMocks
     private NotificationServiceImpl notificationService;
@@ -73,20 +70,15 @@ public class NotificationServiceTest {
     }
 
     @Test
-    void send_CriticalAlert_ShouldSendEmail() {
+    void send_CriticalAlert_ShouldTriggerEmailService() {
         request.setSeverity(Notification.Severity.CRITICAL);
         notification.setSeverity(Notification.Severity.CRITICAL);
         
-        UserProfileResponse user = new UserProfileResponse();
-        user.setEmail("test@example.com");
-        
         when(notificationRepository.save(any(Notification.class))).thenReturn(notification);
-        when(authClient.getUserById(1L)).thenReturn(user);
-        when(mailSender.createMimeMessage()).thenReturn(mock(MimeMessage.class));
 
         notificationService.send(request);
 
-        verify(mailSender, times(1)).send(any(MimeMessage.class));
+        verify(emailService, times(1)).sendCriticalAlertEmail(any(Notification.class));
     }
 
     @Test
