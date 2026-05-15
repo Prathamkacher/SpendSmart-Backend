@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: api-gateway
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
   cloud:
     gateway:
       discovery:
@@ -154,7 +156,7 @@ spring:
             - PrefixPath=/api
             - name: CircuitBreaker
               args:
-                name: recurring-service
+                name: recurring-transaction-service
                 fallbackUri: forward:/fallback/recurring
 
         # Recurring Docs (Aggregated)
@@ -249,10 +251,6 @@ eureka:
       defaultZone: ${EUREKA_SERVER:http://eureka-server:8761/eureka/}
   instance:
     prefer-ip-address: true
-
-spring:
-  rabbitmq:
-    host: ${RABBITMQ_HOST:rabbitmq}
 
 management:
   endpoints:
