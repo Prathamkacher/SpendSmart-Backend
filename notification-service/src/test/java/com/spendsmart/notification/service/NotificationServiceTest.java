@@ -7,6 +7,7 @@ import com.spendsmart.notification.dto.UserProfileResponse;
 import com.spendsmart.notification.entity.Notification;
 import com.spendsmart.notification.repository.NotificationRepository;
 import com.spendsmart.notification.service.impl.NotificationServiceImpl;
+import com.spendsmart.notification.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
