@@ -5,6 +5,7 @@ import com.spendsmart.notification.dto.NotificationRequest;
 import com.spendsmart.notification.entity.Notification;
 import com.spendsmart.notification.repository.NotificationRepository;
 import com.spendsmart.notification.service.NotificationService;
+import com.spendsmart.notification.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
