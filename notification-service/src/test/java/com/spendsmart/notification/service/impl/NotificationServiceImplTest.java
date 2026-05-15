@@ -214,4 +214,3 @@ class NotificationServiceImplTest {
                 .isInstanceOf(RuntimeException.class);
     }
 }
-}
