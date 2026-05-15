@@ -24,6 +24,9 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private static final String UTF_8 = StandardCharsets.UTF_8.name();
 
+    @Value("${app.frontend-url:http://localhost:4200}")
+    private String frontendUrl;
+
     private String buildHtmlTemplate(String title, String bodyContent) {
         return "<!DOCTYPE html>" +
                 "<html><head><style>" +
@@ -275,7 +278,7 @@ public class EmailService {
                     "<h3 style='color: " + roleColor + "; font-size: 32px; margin: 8px 0; font-weight: 800;'>" + newRole + "</h3>" +
                     "</div>" +
                     "<p>As an <strong>" + newRole + "</strong>, your access levels have been adjusted accordingly. Please log in to explore your " + (newRole.equals("ADMIN") ? "administrative" : "new") + " dashboard.</p>" +
-                    "<a href='http://localhost:4200' class='btn'>Log In to SpendSmart</a>" +
+                    "<a href='" + frontendUrl + "' class='btn'>Log In to SpendSmart</a>" +
                     "<br><br><p>Best regards,<br><strong>The SpendSmart Admin Team</strong></p>";
                     
             helper.setText(buildHtmlTemplate("Account Privilege Update", bodyContent), true);
@@ -355,7 +358,7 @@ public class EmailService {
                     "<li>Resume tracking expenses and income</li>" +
                     "<li>All your previous data is preserved</li>" +
                     "</ul>" +
-                    "<a href='http://localhost:4200' class='btn'>Log In to SpendSmart</a>" +
+                    "<a href='" + frontendUrl + "' class='btn'>Log In to SpendSmart</a>" +
                     "<br><br><p>Welcome back!<br><strong>The SpendSmart Admin Team</strong></p>";
 
             helper.setText(buildHtmlTemplate("Account Reactivated", bodyContent), true);

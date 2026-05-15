@@ -9,7 +9,10 @@ spring:
   boot:
     admin:
       client:
-        url: ${ADMIN_SERVER_URL:http://localhost:8082}
+        url: ${ADMIN_SERVER_URL:http://admin-server:8082}
+        instance:
+          service-base-url: http://spendsmart-expense:8083/api
+          management-base-url: http://spendsmart-expense:8083/api
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/${DB_DATABASE:spendsmart}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}

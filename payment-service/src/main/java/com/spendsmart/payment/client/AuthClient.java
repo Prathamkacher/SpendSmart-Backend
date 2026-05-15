@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
-@FeignClient(name = "auth-service", url = "http://localhost:8081") // Use LB in production: lb://auth-service
+@FeignClient(name = "auth-service")
 public interface AuthClient {
 
     @PutMapping("/api/auth/profile/upgrade")

@@ -24,6 +24,9 @@ public class NotificationServiceImpl implements NotificationService {
     private final JavaMailSender mailSender;
     private final com.spendsmart.notification.client.AuthClient authClient;
 
+    @org.springframework.beans.factory.annotation.Value("${app.frontend-url:http://localhost:4200}")
+    private String frontendUrl;
+
     @Override
     @Transactional
     public NotificationDTO send(NotificationRequest request) {
@@ -178,7 +181,7 @@ public class NotificationServiceImpl implements NotificationService {
                 "<div class='total-row receipt-row'><span class='receipt-label'>Total Paid</span><span class='receipt-value'>" + notification.getMessage() + "</span></div>" +
                 "</div>" +
                 "<p>We're excited to help you take control of your financial future.</p>" +
-                "<center><a href='http://localhost:4200/dashboard' class='btn'>Explore Pro Features</a></center>" +
+                "<center><a href='" + frontendUrl + "/dashboard' class='btn'>Explore Pro Features</a></center>" +
                 "</div>" +
                 "<div class='footer'><p>&copy; " + java.time.Year.now().getValue() + " SpendSmart. Premium Financial Management.</p></div>" +
                 "</div></div></body></html>";

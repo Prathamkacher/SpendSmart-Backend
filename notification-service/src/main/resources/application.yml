@@ -6,8 +6,18 @@ server:
 spring:
   application:
     name: notification-service
+    admin:
+      client:
+        url: ${ADMIN_SERVER_URL:http://admin-server:8082}
+        instance:
+          service-base-url: http://spendsmart-notification:8089/api
+          management-base-url: http://spendsmart-notification:8089/api
+ 
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:4200}
+
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/${NOTIFICATION_DB_DATABASE:notification_db}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
