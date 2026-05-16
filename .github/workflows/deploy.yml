@@ -173,5 +173,5 @@ jobs:
             cd ~/SpendSmart-Backend
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            sudo docker-compose --env-file .env -f docker-compose.prod.yml pull
-            sudo docker-compose --env-file .env -f docker-compose.prod.yml up -d
+            sudo docker-compose -p spendsmart --env-file .env -f docker-compose.prod.yml pull
+            sudo docker-compose -p spendsmart --env-file .env -f docker-compose.prod.yml up -d
