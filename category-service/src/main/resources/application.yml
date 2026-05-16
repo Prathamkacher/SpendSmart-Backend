@@ -9,7 +9,7 @@ spring:
   boot:
     admin:
       client:
-        url: ${ADMIN_SERVER_URL:http://localhost:8082}
+        url: ${ADMIN_SERVER_URL:http://admin-server:8082}
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/spendsmart_category?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}

@@ -6,6 +6,7 @@ server:
 spring:
   application:
     name: notification-service
+  boot:
     admin:
       client:
         url: ${ADMIN_SERVER_URL:http://admin-server:8082}

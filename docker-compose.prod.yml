@@ -45,9 +45,9 @@ services:
     restart: always
     ports:
       - "8761:8761"
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
     networks:
       - spendsmart-network
 
@@ -55,9 +55,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-auth:latest
     container_name: spendsmart-auth
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_auth?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -83,9 +83,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-expense:latest
     container_name: spendsmart-expense
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_expense?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -104,9 +104,9 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    mem_limit: 640m
+    mem_limit: 512m
     environment:
-      JAVA_OPTS: "-Xms256m -Xmx448m"
+      JAVA_OPTS: "-Xms256m -Xmx320m"
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
     networks:
@@ -118,9 +118,9 @@ services:
     restart: always
     ports:
       - "8082:8082"
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
       RABBITMQ_HOST: rabbitmq
@@ -131,9 +131,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-income:latest
     container_name: spendsmart-income
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_income?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -150,9 +150,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-category:latest
     container_name: spendsmart-category
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_category?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -169,9 +169,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-budget:latest
     container_name: spendsmart-budget
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_budget?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -188,9 +188,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-analytics:latest
     container_name: spendsmart-analytics
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_analytics?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -207,9 +207,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-recurring:latest
     container_name: spendsmart-recurring
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -226,9 +226,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-notification:latest
     container_name: spendsmart-notification
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
@@ -247,9 +247,9 @@ services:
     image: ${DOCKERHUB_USERNAME}/spendsmart-payment:latest
     container_name: spendsmart-payment
     restart: always
-    mem_limit: 512m
+    mem_limit: 448m
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx384m"
+      JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8

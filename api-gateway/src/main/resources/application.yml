@@ -208,6 +208,7 @@ spring:
               - "http://localhost"
               - "http://13.48.183.110"
               - "http://13.48.183.110.sslip.io"
+              - "http://spendsmart.linkpc.net"
             allowedMethods:
               - GET
               - POST

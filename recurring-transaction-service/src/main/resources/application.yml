@@ -4,13 +4,13 @@ server:
 spring:
   application:
     name: recurring-transaction-service
-    boot:
-      admin:
-        client:
-          url: ${ADMIN_SERVER_URL:http://admin-server:8082}
-          instance:
-            service-base-url: http://spendsmart-recurring:8088/api
-            management-base-url: http://spendsmart-recurring:8088/api
+  boot:
+    admin:
+      client:
+        url: ${ADMIN_SERVER_URL:http://admin-server:8082}
+        instance:
+          service-base-url: http://spendsmart-recurring:8088/api
+          management-base-url: http://spendsmart-recurring:8088/api
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}
     username: ${DB_USERNAME:root}
