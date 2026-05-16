@@ -14,11 +14,8 @@ spring:
           service-base-url: http://spendsmart-notification:8089/api
           management-base-url: http://spendsmart-notification:8089/api
  
-app:
-  frontend-url: ${FRONTEND_URL:http://localhost:4200}
-
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci}
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -47,6 +44,9 @@ app:
           auth: true
           starttls:
             enable: true
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:4200}
 
 eureka:
   client:
