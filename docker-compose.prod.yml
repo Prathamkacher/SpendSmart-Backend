@@ -60,7 +60,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_auth?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_auth?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
@@ -88,7 +88,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_expense?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_expense?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -136,7 +136,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_income?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_income?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -155,7 +155,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_category?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_category?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -174,7 +174,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_budget?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_budget?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -193,7 +193,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_analytics?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spendsmart_analytics?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -212,7 +212,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/recurring_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
@@ -231,7 +231,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       MAIL_USERNAME: ${MAIL_USERNAME}
@@ -252,7 +252,7 @@ services:
       JAVA_OPTS: "-Xms128m -Xmx256m"
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_SERVER: http://eureka-server:8761/eureka/
       RABBITMQ_HOST: rabbitmq
