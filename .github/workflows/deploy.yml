@@ -161,7 +161,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "docker-compose.prod.yml"
-          target: "~/spendsmart"
+          target: "~/SpendSmart-Backend"
 
       - name: Execute Remote SSH Commands
         uses: appleboy/ssh-action@v1.0.3
@@ -170,7 +170,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/spendsmart
+            cd ~/SpendSmart-Backend
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | sudo docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             sudo docker-compose --env-file .env -f docker-compose.prod.yml pull
