@@ -240,21 +240,21 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
 
         // Expense defaults
-        seedIfMissing(userId, "Food",          CategoryType.EXPENSE, "🍔", "#EF4444", existingNames);
-        seedIfMissing(userId, "Transport",     CategoryType.EXPENSE, "🚗", "#F59E0B", existingNames);
-        seedIfMissing(userId, "Bills",         CategoryType.EXPENSE, "💡", "#3B82F6", existingNames);
-        seedIfMissing(userId, "Health",        CategoryType.EXPENSE, "🏥", "#10B981", existingNames);
-        seedIfMissing(userId, "Entertainment", CategoryType.EXPENSE, "🎬", "#8B5CF6", existingNames);
-        seedIfMissing(userId, "Shopping",      CategoryType.EXPENSE, "🛍️", "#EC4899", existingNames);
-        seedIfMissing(userId, "Education",     CategoryType.EXPENSE, "📚", "#06B6D4", existingNames);
-        seedIfMissing(userId, "Other",         CategoryType.EXPENSE, "📦", "#6B7280", existingNames);
+        seedIfMissing(userId, "Food",          CategoryType.EXPENSE, "\uD83C\uDF54", "#EF4444", existingNames);
+        seedIfMissing(userId, "Transport",     CategoryType.EXPENSE, "\uD83D\uDE97", "#F59E0B", existingNames);
+        seedIfMissing(userId, "Bills",         CategoryType.EXPENSE, "\uD83D\uDCA1", "#3B82F6", existingNames);
+        seedIfMissing(userId, "Health",        CategoryType.EXPENSE, "\uD83C\uDFE5", "#10B981", existingNames);
+        seedIfMissing(userId, "Entertainment", CategoryType.EXPENSE, "\uD83C\uDFAC", "#8B5CF6", existingNames);
+        seedIfMissing(userId, "Shopping",      CategoryType.EXPENSE, "\uD83D\uDECD", "#EC4899", existingNames);
+        seedIfMissing(userId, "Education",     CategoryType.EXPENSE, "\uD83D\uDCDA", "#06B6D4", existingNames);
+        seedIfMissing(userId, "Other",         CategoryType.EXPENSE, "\uD83D\uDCE6", "#6B7280", existingNames);
 
         // Income defaults
-        seedIfMissing(userId, "Salary",     CategoryType.INCOME, "💼", "#16A34A", existingNames);
-        seedIfMissing(userId, "Freelance",  CategoryType.INCOME, "💻", "#2563EB", existingNames);
-        seedIfMissing(userId, "Business",   CategoryType.INCOME, "🏢", "#7C3AED", existingNames);
-        seedIfMissing(userId, "Investment", CategoryType.INCOME, "📈", "#0891B2", existingNames);
-        seedIfMissing(userId, "Gift",       CategoryType.INCOME, "🎁", "#DB2777", existingNames);
+        seedIfMissing(userId, "Salary",     CategoryType.INCOME, "\uD83D\uDCBC", "#16A34A", existingNames);
+        seedIfMissing(userId, "Freelance",  CategoryType.INCOME, "\uD83D\uDCBB", "#2563EB", existingNames);
+        seedIfMissing(userId, "Business",   CategoryType.INCOME, "\uD83C\uDFE2", "#7C3AED", existingNames);
+        seedIfMissing(userId, "Investment", CategoryType.INCOME, "\uD83D\uDCC8", "#0891B2", existingNames);
+        seedIfMissing(userId, "Gift",       CategoryType.INCOME, "\uD83C\uDF81", "#DB2777", existingNames);
 
         log.info("Default categories check completed for user: {}", userId);
     }

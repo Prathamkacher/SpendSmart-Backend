@@ -49,7 +49,7 @@ class CategoryServiceImplTest {
                 .userId(userId)
                 .name("Food")
                 .type(CategoryType.EXPENSE)
-                .icon("🍔")
+                .icon("\uD83C\uDF54")
                 .colorCode("#EF4444")
                 .isDefault(false)
                 .build();
@@ -57,7 +57,7 @@ class CategoryServiceImplTest {
         categoryRequest = new CategoryRequest();
         categoryRequest.setName("Food");
         categoryRequest.setType(CategoryType.EXPENSE);
-        categoryRequest.setIcon("🍔");
+        categoryRequest.setIcon("\uD83C\uDF54");
         categoryRequest.setColorCode("#EF4444");
     }
 
